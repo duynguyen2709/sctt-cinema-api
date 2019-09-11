@@ -1,0 +1,43 @@
+package com.sctt.cinema.api.business.service;
+
+import com.sctt.cinema.api.business.entity.jpa.Seat;
+import com.sctt.cinema.api.business.repository.BaseCRUDRepository;
+import com.sctt.cinema.api.business.repository.SeatRepository;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Log4j2
+@Service
+public class SeatRepositoryImpl implements BaseCRUDRepository<Seat,Integer> {
+
+    @Autowired
+    private SeatRepository repo;
+
+    @Override
+    public List<Seat> findAll() {
+        return repo.findAll();
+    }
+
+    @Override
+    public Seat create(Seat seat) {
+        return repo.save(seat);
+    }
+
+    @Override
+    public Seat update(Seat seat) {
+        return repo.save(seat);
+    }
+
+    @Override
+    public Seat find(Integer key) {
+        return repo.findById(key).orElse(null);
+    }
+
+    @Override
+    public void delete(Integer key) {
+        repo.deleteById(key);
+    }
+}
