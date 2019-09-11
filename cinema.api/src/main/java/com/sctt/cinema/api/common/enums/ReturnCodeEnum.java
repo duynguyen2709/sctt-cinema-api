@@ -11,7 +11,7 @@ public enum ReturnCodeEnum {
 
     private static final HashMap<Integer, ReturnCodeEnum> returnMap = new HashMap();
 
-    private ReturnCodeEnum(int value) {
+    ReturnCodeEnum(int value) {
         this.value = value;
     }
 
@@ -20,12 +20,7 @@ public enum ReturnCodeEnum {
     }
 
     public static ReturnCodeEnum fromInt(int iValue) {
-        return (ReturnCodeEnum)returnMap.get(iValue);
-    }
-
-    public static ReturnCodeEnum fromIntDefault(int iValue, ReturnCodeEnum defaultValue) {
-        ReturnCodeEnum code = (ReturnCodeEnum)returnMap.get(iValue);
-        return code != null ? code : defaultValue;
+        return returnMap.get(iValue);
     }
 
     public String toString() {

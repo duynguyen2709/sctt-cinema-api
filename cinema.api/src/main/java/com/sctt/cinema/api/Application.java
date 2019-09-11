@@ -1,8 +1,6 @@
 package com.sctt.cinema.api;
 
-import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +10,7 @@ import org.springframework.context.event.EventListener;
 
 @SpringBootApplication
 @Log4j2
-public class Application implements CommandLineRunner {
+public class Application {
 
 	@Value("${server.port}")
 	private int port;
@@ -21,13 +19,10 @@ public class Application implements CommandLineRunner {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Override
-	public void run(String... args) throws Exception {
-	}
-
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
+
 			log.info("=============== Application Initializing... ===============");
 
 			log.info("Application Started on Port {}", port);
