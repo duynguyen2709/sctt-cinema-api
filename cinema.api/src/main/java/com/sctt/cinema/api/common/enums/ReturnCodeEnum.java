@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public enum ReturnCodeEnum {
 
-    SUCCESSFUL(1),
+    SUCCESS(1),
     EXCEPTION(0);
 
     private final int value;
