@@ -3,8 +3,10 @@ package com.sctt.cinema.api;
 import com.sctt.cinema.api.business.entity.DTO.ShowtimeByFormatDTO;
 import com.sctt.cinema.api.business.entity.DTO.ShowtimeDTO;
 import com.sctt.cinema.api.business.entity.DTO.ShowtimeDetailDTO;
+import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
 import com.sctt.cinema.api.business.entity.jpa.TicketLog;
 import com.sctt.cinema.api.business.repository.TicketLogRepository;
+import com.sctt.cinema.api.business.service.HazelCast;
 import com.sctt.cinema.api.util.DateTimeUtils;
 import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
@@ -28,11 +30,18 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
+	@Autowired
+	private HazelCastConfig hazelCastConfig;
+
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
 
 			log.info("=============== Application Initializing... ===============");
+
+			if (hazelCastConfig.useHazelCast) {
+				HazelCast.getInstance().initHazelCastConfig(hazelCastConfig);
+			}
 
 			log.info("Application Started on Port {}", port);
 			log.info("=============== Application Init Done ===============");
