@@ -24,9 +24,6 @@ public class Application {
 	@Value("${server.port}")
 	private int port;
 
-	@Autowired
-	private TicketLogRepository repo;
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
@@ -38,17 +35,6 @@ public class Application {
 			log.info("=============== Application Initializing... ===============");
 
 			log.info("Application Started on Port {}", port);
-
-			TicketLog dto = new TicketLog();
-			dto.ticketID = "2";
-			dto.customerID = "123";
-			dto.showtimeID = 5;
-			dto.totalPrice = 100L;
-			dto.seatCodes = GsonUtils.toJsonString(Arrays.asList("A2","V3"));
-
-			repo.save(dto);
-
-			log.info(GsonUtils.toJsonString(repo.findById("2").get()));
 
 			log.info("=============== Application Init Done ===============");
 
