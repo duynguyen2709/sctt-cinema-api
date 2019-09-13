@@ -35,7 +35,6 @@ public class Application {
 			log.info("=============== Application Initializing... ===============");
 
 			log.info("Application Started on Port {}", port);
-
 			log.info("=============== Application Init Done ===============");
 
 		} catch (Exception e){
