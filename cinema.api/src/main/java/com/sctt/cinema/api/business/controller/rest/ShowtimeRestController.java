@@ -1,7 +1,7 @@
 package com.sctt.cinema.api.business.controller.rest;
 
-import com.sctt.cinema.api.business.entity.jpa.Theater;
-import com.sctt.cinema.api.business.repository.TheaterRepository;
+import com.sctt.cinema.api.business.entity.jpa.Showtime;
+import com.sctt.cinema.api.business.repository.ShowtimeRepository;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
@@ -13,12 +13,12 @@ import java.util.Collections;
 @RestController
 @RequestMapping("/api")
 @Log4j2
-public class TheaterRestController {
+public class ShowtimeRestController {
 
     @Autowired
-    private TheaterRepository repo;
+    private ShowtimeRepository repo;
 
-    @GetMapping("/theater")
+    @GetMapping("/showtime")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,12 +32,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @GetMapping("/theater/{theaterID}")
-    public BaseResponse findByID(@PathVariable String theaterID){
+    @GetMapping("/showtime/{showtimeID}")
+    public BaseResponse findByID(@PathVariable int showtimeID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.findById(theaterID).get();
+            res.data = repo.findById(showtimeID).get();
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -46,12 +46,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @PostMapping("/theater")
-    public BaseResponse insert(@RequestBody Theater theater){
+    @PostMapping("/showtime")
+    public BaseResponse insert(@RequestBody Showtime showtime){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.save(theater);
+            res.data = repo.save(showtime);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -60,26 +60,26 @@ public class TheaterRestController {
         return res;
     }
 
-    @PutMapping("/theater/{theaterID}")
-    public BaseResponse insert(@PathVariable String theaterID,@RequestBody Theater theater){
+    @PutMapping("/showtime/{showtimeID}")
+    public BaseResponse insert(@PathVariable String showtimeID,@RequestBody Showtime showtime){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.save(theater);
+            res.data = repo.save(showtime);
         } catch (Exception e){
-            log.error("[insert] ex: {}",e.getMessage());
+            log.error("[put] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
         return res;
     }
 
-    @DeleteMapping("/theater/{theaterID}")
-    public BaseResponse delete(@PathVariable String theaterID){
+    @DeleteMapping("/showtime/{showtimeID}")
+    public BaseResponse delete(@PathVariable int showtimeID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            repo.deleteById(theaterID);
+            repo.deleteById(showtimeID);
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());
