@@ -1,4 +1,4 @@
-package com.sctt.cinema.api.business.service;
+package com.sctt.cinema.api.common;
 
 
 import com.hazelcast.config.Config;
@@ -11,7 +11,6 @@ import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionOptions;
 import com.hazelcast.transaction.TransactionOptions.TransactionType;
 import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;

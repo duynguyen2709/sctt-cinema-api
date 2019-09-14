@@ -1,14 +1,7 @@
 package com.sctt.cinema.api;
 
-import com.sctt.cinema.api.business.entity.DTO.ShowtimeByFormatDTO;
-import com.sctt.cinema.api.business.entity.DTO.ShowtimeDTO;
-import com.sctt.cinema.api.business.entity.DTO.ShowtimeDetailDTO;
 import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
-import com.sctt.cinema.api.business.entity.jpa.TicketLog;
-import com.sctt.cinema.api.business.repository.TicketLogRepository;
-import com.sctt.cinema.api.business.service.HazelCast;
-import com.sctt.cinema.api.util.DateTimeUtils;
-import com.sctt.cinema.api.util.GsonUtils;
+import com.sctt.cinema.api.common.HazelCast;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +9,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-
-import java.util.Arrays;
 
 @SpringBootApplication
 @Log4j2

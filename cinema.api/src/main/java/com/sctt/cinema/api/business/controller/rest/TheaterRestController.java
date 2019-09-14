@@ -82,7 +82,7 @@ public class TheaterRestController {
             repo.deleteById(theaterID);
             res.data = true;
         } catch (Exception e){
-            log.error("[insert] ex: {}",e.getMessage());
+            log.error("[delete] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
