@@ -1,14 +1,12 @@
 package com.sctt.cinema.api.business.controller.rest;
 
 import com.sctt.cinema.api.business.entity.jpa.Theater;
-import com.sctt.cinema.api.business.repository.TheaterRepository;
+import com.sctt.cinema.api.business.service.jpa.TheaterService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/api")
@@ -16,14 +14,14 @@ import java.util.Collections;
 public class TheaterRestController {
 
     @Autowired
-    private TheaterRepository repo;
+    private TheaterService service;
 
     @GetMapping("/theater")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.findAll();
+            res.data = service.findAll();
         } catch (Exception e){
             log.error("[findAll] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -37,7 +35,7 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.findById(theaterID).get();
+            res.data = service.findById(theaterID);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -51,7 +49,7 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.save(theater);
+            res.data = service.create(theater);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -65,7 +63,7 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.save(theater);
+            res.data = service.update(theater);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -79,7 +77,7 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            repo.deleteById(theaterID);
+            service.delete(theaterID);
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());
