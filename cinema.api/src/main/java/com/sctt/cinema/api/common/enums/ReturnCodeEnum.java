@@ -4,6 +4,9 @@ import java.util.HashMap;
 
 public enum ReturnCodeEnum {
 
+    UNAUTHORIZE(-401),
+    TOKEN_EXPIRED(-400),
+    WRONG_USERNAME_OR_PASSWORD(-1),
     SUCCESS(1),
     EXCEPTION(0);
 
