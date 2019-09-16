@@ -26,12 +26,6 @@ public class Application {
 	@Autowired
 	private HazelCastConfig hazelCastConfig;
 
-	@Autowired
-	private HazelCastService hazelCastService;
-
-	@Autowired
-	private TheaterService service;
-
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
@@ -41,8 +35,6 @@ public class Application {
 			if (hazelCastConfig.useHazelCast) {
 				HazelCastUtil.getInstance().initHazelCastConfig(hazelCastConfig);
 			}
-
-			log.info(service.findAll());
 
 			log.info("Application Started on Port {}", port);
 			log.info("=============== Application Init Done ===============");

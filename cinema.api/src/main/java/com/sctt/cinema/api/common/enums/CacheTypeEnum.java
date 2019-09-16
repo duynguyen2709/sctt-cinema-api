@@ -13,7 +13,7 @@ public enum CacheTypeEnum {
 
     private final String value;
 
-    private static final Map<String, CacheTypeEnum> returnMap = new HashMap();
+    private static final Map<String, CacheTypeEnum> returnMap = new HashMap<>();
 
     CacheTypeEnum(String value) {
         this.value = value;

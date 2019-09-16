@@ -27,7 +27,7 @@ public class HazelCastService {
 
     private static HazelCastUtil hazelCast = HazelCastUtil.getInstance();
 
-    public <K, V> Map<K, V> reload(Map<K, V> mapFromDb, HazelCastKeyEnum hazelCastKey){
+    private <K, V> Map<K, V> reload(Map<K, V> mapFromDb, HazelCastKeyEnum hazelCastKey){
 
         if (!useHazelcast) {
             return mapFromDb;
@@ -49,7 +49,7 @@ public class HazelCastService {
         return hazelCast.getMap(hazelCastKey.name());
     }
 
-    public Map loadTheaterMap(){
+    private Map loadTheaterMap(){
         if (CacheMaps.THEATER_MAP != null) {
             CacheMaps.THEATER_MAP.clear();
             CacheMaps.THEATER_MAP = null;

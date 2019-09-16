@@ -73,7 +73,7 @@ public enum ProvinceEnum {
     private final int code;
     private final String provinceName;
 
-    private static final HashMap<Integer, ProvinceEnum> returnMap = new HashMap();
+    private static final HashMap<Integer, ProvinceEnum> returnMap = new HashMap<>();
 
     ProvinceEnum(int value, String name) {
         this.code = value;
@@ -95,10 +95,7 @@ public enum ProvinceEnum {
     static {
         ProvinceEnum[] var0 = values();
 
-        int var1 = var0.length;
-
-        for (int var2 = 0; var2 < var1; ++var2) {
-            ProvinceEnum province = var0[var2];
+        for (ProvinceEnum province : var0) {
             returnMap.put(province.code, province);
         }
 

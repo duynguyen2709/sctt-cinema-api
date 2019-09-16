@@ -12,7 +12,7 @@ public enum ReturnCodeEnum {
 
     private final int value;
 
-    private static final HashMap<Integer, ReturnCodeEnum> returnMap = new HashMap();
+    private static final HashMap<Integer, ReturnCodeEnum> returnMap = new HashMap<>();
 
     ReturnCodeEnum(int value) {
         this.value = value;
@@ -32,10 +32,8 @@ public enum ReturnCodeEnum {
 
     static {
         ReturnCodeEnum[] var0 = values();
-        int              var1 = var0.length;
 
-        for(int var2 = 0; var2 < var1; ++var2) {
-            ReturnCodeEnum errorCodeEnum = var0[var2];
+        for (ReturnCodeEnum errorCodeEnum : var0) {
             returnMap.put(errorCodeEnum.value, errorCodeEnum);
         }
 
