@@ -56,19 +56,6 @@ public class TheaterService extends BaseJPAService<Theater,String>{
     public Theater findById(String key) {
         Theater t = cacheMap.get(key);
 
-        return (t == null ? findByIdInRepository(key) : t);
-    }
-
-    @Override
-    protected Theater findByIdInRepository(String key) {
-        Theater t = null;
-
-        boolean hasInRepo = repo.findById(key).isPresent();
-        if (hasInRepo){
-            t = repo.findById(key).get();
-            cacheMap.put(key,t);
-        }
-
         return t;
     }
 

@@ -25,14 +25,11 @@ public class HazelCastService {
     @Autowired
     private TheaterRepository theaterRepository;
 
-    @Autowired
-    private HazelCastConfig hazelCastConfig;
-
     private static HazelCastUtil hazelCast = HazelCastUtil.getInstance();
 
     public <K, V> Map<K, V> reload(Map<K, V> mapFromDb, HazelCastKeyEnum hazelCastKey){
 
-        if (!hazelCastConfig.useHazelCast) {
+        if (!useHazelcast) {
             return mapFromDb;
         }
 

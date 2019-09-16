@@ -48,8 +48,10 @@ public class HazelCastUtil {
     }
 
     public TransactionContext getTransactionContext() {
-        TransactionOptions transOp =
-                (new TransactionOptions()).setTimeout(3L, TimeUnit.SECONDS).setTransactionType(TransactionType.ONE_PHASE);
+        TransactionOptions transOp = (new TransactionOptions())
+                .setTimeout(3L, TimeUnit.SECONDS)
+                .setTransactionType(TransactionType.ONE_PHASE);
+
         return this.getTransactionContext(transOp);
     }
 
