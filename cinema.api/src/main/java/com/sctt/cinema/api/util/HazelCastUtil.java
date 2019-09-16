@@ -1,5 +1,4 @@
-package com.sctt.cinema.api.common;
-
+package com.sctt.cinema.api.util;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.config.JoinConfig;
@@ -15,14 +14,15 @@ import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class HazelCast {
-    private static final HazelCast INSTANCE = new HazelCast();
+public class HazelCastUtil {
+    private static final HazelCastUtil INSTANCE = new HazelCastUtil();
+
     private HazelcastInstance hazelCastInstance;
 
-    private HazelCast() {
+    private HazelCastUtil() {
     }
 
-    public static HazelCast getInstance() {
+    public static HazelCastUtil getInstance() {
         return INSTANCE;
     }
 
@@ -33,10 +33,13 @@ public class HazelCast {
     public void initHazelCastConfig(HazelCastConfig conf) {
         Config hazelCastConf = new Config();
         hazelCastConf.getNetworkConfig().setPort(conf.networkPort).setPortAutoIncrement(conf.isPortAutoIncrement);
+
         JoinConfig join = hazelCastConf.getNetworkConfig().getJoin();
         join.getMulticastConfig().setEnabled(false);
         join.getTcpIpConfig().setEnabled(true).clear().setMembers(conf.tcpIPMembers);
+
         hazelCastConf.setInstanceName(conf.instanceName);
+
         this.hazelCastInstance = Hazelcast.newHazelcastInstance(hazelCastConf);
     }
 
@@ -45,7 +48,8 @@ public class HazelCast {
     }
 
     public TransactionContext getTransactionContext() {
-        TransactionOptions transOp = (new TransactionOptions()).setTimeout(3L, TimeUnit.SECONDS).setTransactionType(TransactionType.ONE_PHASE);
+        TransactionOptions transOp =
+                (new TransactionOptions()).setTimeout(3L, TimeUnit.SECONDS).setTransactionType(TransactionType.ONE_PHASE);
         return this.getTransactionContext(transOp);
     }
 

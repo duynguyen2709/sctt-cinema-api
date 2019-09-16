@@ -1,7 +1,10 @@
 package com.sctt.cinema.api.business.service.jpa;
 
+import com.sctt.cinema.api.business.entity.CacheMaps;
 import com.sctt.cinema.api.business.entity.jpa.Theater;
 import com.sctt.cinema.api.business.repository.TheaterRepository;
+import com.sctt.cinema.api.business.service.HazelCastService;
+import com.sctt.cinema.api.common.enums.HazelCastKeyEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +24,7 @@ public class TheaterService extends BaseJPAService<Theater,String>{
     @Override
     @PostConstruct
     protected void init() {
-        if (cacheMap == null) {
-            cacheMap = new HashMap<>();
-
-            repo.findAll().forEach(c -> cacheMap.put(c.theaterID,c));
-        }
+        loadCacheMap(HazelCastKeyEnum.THEATER);
     }
 
     @Override

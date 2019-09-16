@@ -1,7 +1,9 @@
 package com.sctt.cinema.api;
 
 import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
-import com.sctt.cinema.api.common.HazelCast;
+import com.sctt.cinema.api.business.service.HazelCastService;
+import com.sctt.cinema.api.business.service.jpa.TheaterService;
+import com.sctt.cinema.api.util.HazelCastUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +11,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
 @Log4j2
@@ -25,6 +26,12 @@ public class Application {
 	@Autowired
 	private HazelCastConfig hazelCastConfig;
 
+	@Autowired
+	private HazelCastService hazelCastService;
+
+	@Autowired
+	private TheaterService service;
+
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
@@ -32,8 +39,10 @@ public class Application {
 			log.info("=============== Application Initializing... ===============");
 
 			if (hazelCastConfig.useHazelCast) {
-				HazelCast.getInstance().initHazelCastConfig(hazelCastConfig);
+				HazelCastUtil.getInstance().initHazelCastConfig(hazelCastConfig);
 			}
+
+			log.info(service.findAll());
 
 			log.info("Application Started on Port {}", port);
 			log.info("=============== Application Init Done ===============");
