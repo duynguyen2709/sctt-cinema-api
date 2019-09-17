@@ -14,5 +14,7 @@ public class RoomStatusDTO implements Serializable {
 
     public int showtimeID;
 
+    public int roomID;
+
     public List<List<SeatStatusDTO>> seats;
 }

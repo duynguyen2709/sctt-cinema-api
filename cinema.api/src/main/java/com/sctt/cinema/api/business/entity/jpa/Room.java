@@ -18,9 +18,8 @@ public class Room implements Serializable {
     public int roomType;
 
     @Column
+    public int roomNumber;
+
+    @Column
     public String theaterID;
-
-    public int totalNormalSeat = 0;
-    public int totalVIPSeat = 0;
-
 }

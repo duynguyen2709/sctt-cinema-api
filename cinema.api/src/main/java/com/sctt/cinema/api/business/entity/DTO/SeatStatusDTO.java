@@ -11,8 +11,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class SeatStatusDTO implements Serializable {
 
-    public int seatID;
-
     // ma ghe, vd A1...H1...
     public String seatCode;
 
