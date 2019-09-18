@@ -18,6 +18,7 @@ public enum ReturnCodeEnum {
 
     CHECK_SIG_NOT_MATCH(-7),
     TIME_LIMIT_EXCEED(-8),
+    REPLAY_ATTACK_BLOCKED(-9),
     ;
 
 

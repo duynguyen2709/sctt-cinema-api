@@ -1,5 +1,9 @@
 package com.sctt.cinema.api.authentication;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.collect.MapMaker;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import com.sctt.cinema.api.util.GsonUtils;
@@ -11,6 +15,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @WebFilter(urlPatterns = "/client/public/*")
@@ -19,13 +26,24 @@ public class ClientRequestFilter implements Filter {
     @Value("${system.isDebugMode}")
     private boolean IS_DEBUG_MODE;
 
-    private static final Long TIME_LIMIT = 30 * 1000L;
+    private static final Long TIME_LIMIT = 60 * 1000L;
 
     private int    clientid;
     private long   reqdate;
     private String sig;
 
     private static final String HASH_KEY = "SCTT";
+
+    private static ConcurrentMap<Long, Long> REQUEST_VALIDATION_MAP;
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        REQUEST_VALIDATION_MAP = CacheBuilder.newBuilder()
+                                .softValues()
+                                .expireAfterWrite(1,TimeUnit.MINUTES)
+                                .<Long, Long>build()
+                                .asMap();
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -41,6 +59,8 @@ public class ClientRequestFilter implements Filter {
             servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
             return;
         }
+
+        REQUEST_VALIDATION_MAP.put(this.reqdate,this.reqdate + TIME_LIMIT);
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
@@ -85,6 +105,9 @@ public class ClientRequestFilter implements Filter {
             if (System.currentTimeMillis() - this.reqdate > TIME_LIMIT)
                 return ReturnCodeEnum.TIME_LIMIT_EXCEED;
 
+            if (REQUEST_VALIDATION_MAP.containsKey(this.reqdate))
+                return ReturnCodeEnum.REPLAY_ATTACK_BLOCKED;
+
             String dataSig   = String.format("%s|%s|%s", this.clientid, this.reqdate, HASH_KEY);
             String serverSig = HashUtils.hashSHA256(dataSig);
 
@@ -99,5 +122,10 @@ public class ClientRequestFilter implements Filter {
             log.error("[validateParam] ex",e);
             return ReturnCodeEnum.EXCEPTION;
         }
+    }
+
+    @Override
+    public void destroy() {
+        REQUEST_VALIDATION_MAP=null;
     }
 }
