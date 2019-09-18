@@ -4,11 +4,22 @@ import java.util.HashMap;
 
 public enum ReturnCodeEnum {
 
+    SUCCESS(1),
+    EXCEPTION(0),
     UNAUTHORIZE(-401),
     TOKEN_EXPIRED(-400),
     WRONG_USERNAME_OR_PASSWORD(-1),
-    SUCCESS(1),
-    EXCEPTION(0);
+    ACCOUNT_LOCKED(-2),
+
+    PARAM_CLIENTID_INVALID(-3),
+    PARAM_REQDATE_INVALID(-4),
+    PARAM_SIG_INVALID(-5),
+    PARAM_DATA_INVALID(-6),
+
+    CHECK_SIG_NOT_MATCH(-7),
+    TIME_LIMIT_EXCEED(-8),
+    ;
+
 
     private final int value;
 

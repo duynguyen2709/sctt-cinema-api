@@ -27,6 +27,9 @@ public class Movie implements Serializable {
     public String imageURL;
 
     @Column
+    public String trailerURL;
+
+    @Column
     public String description;
 
     @Column
