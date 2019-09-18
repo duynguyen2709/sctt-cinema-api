@@ -3,6 +3,7 @@ package com.sctt.cinema.api.common.enums;
 public enum HazelCastKeyEnum {
 
     THEATER,
+    MOVIE,
     ALL;
 
     public static HazelCastKeyEnum getKey(String type){

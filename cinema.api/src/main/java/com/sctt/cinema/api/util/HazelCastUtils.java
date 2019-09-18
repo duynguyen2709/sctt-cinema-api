@@ -14,15 +14,15 @@ import com.sctt.cinema.api.business.entity.config.HazelCastConfig;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class HazelCastUtil {
-    private static final HazelCastUtil INSTANCE = new HazelCastUtil();
+public class HazelCastUtils {
+    private static final HazelCastUtils INSTANCE = new HazelCastUtils();
 
     private HazelcastInstance hazelCastInstance;
 
-    private HazelCastUtil() {
+    private HazelCastUtils() {
     }
 
-    public static HazelCastUtil getInstance() {
+    public static HazelCastUtils getInstance() {
         return INSTANCE;
     }
 
