@@ -7,6 +7,10 @@ import com.sctt.cinema.api.business.service.HazelCastService;
 import com.sctt.cinema.api.common.enums.HazelCastKeyEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +26,7 @@ public class TheaterService extends BaseJPAService<Theater,String>{
     private TheaterRepository repo;
 
     @Override
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     protected void init() {
         loadCacheMap(HazelCastKeyEnum.THEATER);
     }

@@ -25,18 +25,12 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Autowired
-	private HazelCastConfig hazelCastConfig;
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
 
 			log.info("=============== Application Initializing... ===============");
-
-			if (hazelCastConfig.useHazelCast) {
-				HazelCastUtil.getInstance().initHazelCastConfig(hazelCastConfig);
-			}
 
 			log.info("Application Started on Port {}", port);
 			log.info("=============== Application Init Done ===============");
