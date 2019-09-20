@@ -12,8 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HomeScreenDTO implements Serializable {
+public class MovieListDTO implements Serializable {
     public List<Movie>        currentShowingMovies;
     public List<Movie>        comingSoonMovies;
-    public List<PromotionDTO> promotions;
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,5 +17,5 @@ public class RoomStatusDTO implements Serializable {
 
     public int roomID;
 
-    public List<List<SeatStatusDTO>> seats;
+    public List<List<SeatStatusDTO>> seats = new ArrayList<>();
 }

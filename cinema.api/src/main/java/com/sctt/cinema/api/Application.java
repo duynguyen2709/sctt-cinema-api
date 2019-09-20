@@ -1,6 +1,9 @@
 package com.sctt.cinema.api;
 
+import com.sctt.cinema.api.business.service.jpa.MovieService;
+import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +18,9 @@ public class Application {
 
 	@Value("${server.port}")
 	private int port;
+
+	@Autowired
+	private MovieService movieService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

@@ -8,11 +8,11 @@ public class HashUtils {
 
     public static String hashSHA256(String input) throws NoSuchAlgorithmException {
         MessageDigest mDigest    = MessageDigest.getInstance("SHA-256");
-        byte[]        shaByteArr = mDigest.digest(encodeUTF8(input));
+        byte[]        shaByteArr = mDigest.digest(input.getBytes(Charset.forName("UTF-8")));
         StringBuilder hexString  = new StringBuilder();
 
-        for(int i = 0; i < shaByteArr.length; ++i) {
-            String hex = Integer.toHexString(255 & shaByteArr[i]);
+        for (byte b : shaByteArr) {
+            String hex = Integer.toHexString(255 & b);
             if (hex.length() == 1) {
                 hexString.append('0');
             }
@@ -21,9 +21,5 @@ public class HashUtils {
         }
 
         return hexString.toString();
-    }
-
-    private static byte[] encodeUTF8(String string) {
-        return string.getBytes(Charset.forName("UTF-8"));
     }
 }
