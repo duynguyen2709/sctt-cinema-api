@@ -33,7 +33,7 @@ public class SeatRestController {
     }
 
     @GetMapping("/seat/{seatID}")
-    public BaseResponse findByID(@PathVariable int seatID){
+    public BaseResponse findByID(@PathVariable Seat.SeatID seatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -75,7 +75,7 @@ public class SeatRestController {
     }
 
     @DeleteMapping("/seat/{seatID}")
-    public BaseResponse delete(@PathVariable int seatID){
+    public BaseResponse delete(@PathVariable Seat.SeatID seatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{

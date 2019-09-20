@@ -9,19 +9,18 @@ import java.io.Serializable;
 @Entity
 @Table(name="Showtime")
 public class Showtime implements Serializable {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Integer showtimeID;
+
+    @Column
+    public int roomID;
 
     @Column
     public int movieID;
 
     @Column
     public int movieFormat;
-
-    @Column
-    public int roomID;
 
     @Column
     public long timeFrom;
@@ -31,5 +30,4 @@ public class Showtime implements Serializable {
 
     @Column
     public int status;
-
 }

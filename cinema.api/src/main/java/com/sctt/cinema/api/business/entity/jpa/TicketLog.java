@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 @Table(name="TicketLog")
 public class TicketLog implements Serializable {
-
     @Id
     public String ticketID;
 
@@ -28,13 +27,16 @@ public class TicketLog implements Serializable {
     public int showtimeID;
 
     @Column
-    public String customerID;
+    public String email;
 
     @Column
     public String seatCodes;
 
     @Column
     public long totalPrice;
+
+    @Column
+    public int status;
 
     @Column
     public String extraInfo;

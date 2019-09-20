@@ -15,12 +15,14 @@ public class Room implements Serializable {
     public Integer roomID;
 
     @Column
-    public int roomType;
+    public String theaterID;
 
     @Column
-    public String theaterID;
+    public int roomNumber;
+
+    @Column
+    public int roomType;
 
     public int totalNormalSeat = 0;
     public int totalVIPSeat = 0;
-
 }

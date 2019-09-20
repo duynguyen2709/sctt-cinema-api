@@ -21,7 +21,14 @@ public class ProvinceTheaterMap {
 
     @Autowired
     private void initProvinceTheaterMap(TheaterRepository repo){
-        List<Theater> list = repo.findAll();
+        List<Theater> list = new ArrayList<Theater>();
+
+        try{
+            list = repo.findAll();
+        }
+        catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
         for (Theater t : list){
             int province_code = t.provinceCode;
             if (!provinceTheaterMap.containsKey(province_code))

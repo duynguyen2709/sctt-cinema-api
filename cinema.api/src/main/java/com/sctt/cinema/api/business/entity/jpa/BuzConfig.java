@@ -11,7 +11,6 @@ import java.util.Objects;
 @Entity
 @Table(name="BuzConfig")
 public class BuzConfig implements Serializable {
-
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Integer buzID;
