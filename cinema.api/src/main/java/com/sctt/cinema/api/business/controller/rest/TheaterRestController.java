@@ -31,7 +31,7 @@ public class TheaterRestController {
     }
 
     @GetMapping("/theater/{theaterID}")
-    public BaseResponse findByID(@PathVariable String theaterID){
+    public BaseResponse findByID(@PathVariable Integer theaterID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -59,7 +59,7 @@ public class TheaterRestController {
     }
 
     @PutMapping("/theater/{theaterID}")
-    public BaseResponse insert(@PathVariable String theaterID,@RequestBody Theater theater){
+    public BaseResponse insert(@PathVariable Integer theaterID,@RequestBody Theater theater){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -73,7 +73,7 @@ public class TheaterRestController {
     }
 
     @DeleteMapping("/theater/{theaterID}")
-    public BaseResponse delete(@PathVariable String theaterID){
+    public BaseResponse delete(@PathVariable Integer theaterID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{

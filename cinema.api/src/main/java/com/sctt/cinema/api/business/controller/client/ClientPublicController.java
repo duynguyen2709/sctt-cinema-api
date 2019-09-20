@@ -5,6 +5,7 @@ import com.sctt.cinema.api.business.entity.DTO.RoomStatusDTO;
 import com.sctt.cinema.api.business.entity.DTO.SeatStatusDTO;
 import com.sctt.cinema.api.business.entity.jpa.Movie;
 import com.sctt.cinema.api.business.service.jpa.MovieService;
+import com.sctt.cinema.api.business.service.jpa.TheaterService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.MovieStatusEnum;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
@@ -27,6 +28,9 @@ public class ClientPublicController {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private TheaterService theaterService;
 
     private static final List<List<SeatStatusDTO>> mockSeatStatus = Arrays.asList(
             Arrays.asList(new SeatStatusDTO("A1",1,0),
@@ -119,6 +123,20 @@ public class ClientPublicController {
             res.data = data;
         } catch (Exception e){
             log.error("[getRoomStatus] ex: {}",e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @GetMapping("/theaters")
+    public BaseResponse getProvinceTheater(){
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try{
+            res.data = theaterService.getProvinceTheaterMap();
+        } catch (Exception e){
+            log.error("[getProvinceTheater] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 

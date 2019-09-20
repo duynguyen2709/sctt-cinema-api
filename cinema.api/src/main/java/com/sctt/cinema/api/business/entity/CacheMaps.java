@@ -7,6 +7,6 @@ import java.util.Map;
 
 public class CacheMaps {
 
-    public static Map<String, Theater> THEATER_MAP = null;
+    public static Map<Integer, Theater> THEATER_MAP = null;
     public static Map<Integer, Movie>  MOVIE_MAP = null;
 }

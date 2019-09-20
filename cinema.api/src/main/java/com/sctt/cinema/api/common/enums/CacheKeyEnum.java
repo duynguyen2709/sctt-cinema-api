@@ -1,14 +1,15 @@
 package com.sctt.cinema.api.common.enums;
 
-public enum HazelCastKeyEnum {
+public enum CacheKeyEnum {
 
     THEATER,
     MOVIE,
+    PROVINCE_THEATER,
     ALL;
 
-    public static HazelCastKeyEnum getKey(String type){
+    public static CacheKeyEnum getKey(String type){
 
-        for (HazelCastKeyEnum key : HazelCastKeyEnum.values()){
+        for (CacheKeyEnum key : CacheKeyEnum.values()){
             if (key.name().equalsIgnoreCase(type)) {
                 return key;
             }

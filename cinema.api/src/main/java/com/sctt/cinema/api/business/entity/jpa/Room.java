@@ -21,5 +21,5 @@ public class Room implements Serializable {
     public int roomNumber;
 
     @Column
-    public String theaterID;
+    public int theaterID;
 }

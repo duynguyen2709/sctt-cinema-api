@@ -1,9 +1,8 @@
 package com.sctt.cinema.api.business.service.jpa;
 
 import com.sctt.cinema.api.business.service.HazelCastService;
-import com.sctt.cinema.api.common.enums.HazelCastKeyEnum;
+import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,7 @@ public abstract class BaseJPAService<T,K>  {
     @Autowired
     private HazelCastService hazelCastService;
 
-    protected void loadCacheMap(HazelCastKeyEnum type){
+    protected void loadCacheMap(CacheKeyEnum type){
         if (cacheMap == null)
             cacheMap = hazelCastService.loadCacheMap(type);
     }

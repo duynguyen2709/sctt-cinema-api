@@ -7,7 +7,7 @@ import com.sctt.cinema.api.business.entity.jpa.Theater;
 import com.sctt.cinema.api.business.repository.MovieRepository;
 import com.sctt.cinema.api.business.repository.TheaterRepository;
 import com.sctt.cinema.api.util.HazelCastUtils;
-import com.sctt.cinema.api.common.enums.HazelCastKeyEnum;
+import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class HazelCastService {
 
     private static HazelCastUtils hazelCast = HazelCastUtils.getInstance();
 
-    private <K, V> Map<K, V> reload(Map<K, V> mapFromDb, HazelCastKeyEnum hazelCastKey){
+    private <K, V> Map<K, V> reload(Map<K, V> mapFromDb, CacheKeyEnum hazelCastKey){
 
         if (!useHazelcast) {
             return mapFromDb;
@@ -63,7 +63,7 @@ public class HazelCastService {
 
         movieRepository.findAll().forEach(c -> map.put(c.movieID,c));
 
-        CacheMaps.MOVIE_MAP = reload(map,HazelCastKeyEnum.MOVIE);
+        CacheMaps.MOVIE_MAP = reload(map, CacheKeyEnum.MOVIE);
         log.info("MOVIE_MAP loaded succeed");
 
         return CacheMaps.MOVIE_MAP;
@@ -75,17 +75,17 @@ public class HazelCastService {
             CacheMaps.THEATER_MAP = null;
         }
 
-        Map<String, Theater> map = new HashMap<>();
+        Map<Integer, Theater> map = new HashMap<>();
 
         theaterRepository.findAll().forEach(c -> map.put(c.theaterID,c));
 
-        CacheMaps.THEATER_MAP = reload(map,HazelCastKeyEnum.THEATER);
+        CacheMaps.THEATER_MAP = reload(map, CacheKeyEnum.THEATER);
         log.info("THEATER_MAP loaded succeed");
 
         return CacheMaps.THEATER_MAP;
     }
 
-    public Map loadCacheMap(HazelCastKeyEnum type) {
+    public Map loadCacheMap(CacheKeyEnum type) {
         switch (type){
             case THEATER:
                 return loadTheaterMap();
