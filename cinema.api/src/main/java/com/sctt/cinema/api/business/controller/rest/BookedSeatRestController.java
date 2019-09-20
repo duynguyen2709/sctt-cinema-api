@@ -18,7 +18,7 @@ public class BookedSeatRestController {
     @Autowired
     private BookedSeatRepository repo;
 
-    @GetMapping("/theater")
+    @GetMapping("/bookedSeat")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,8 +32,8 @@ public class BookedSeatRestController {
         return res;
     }
 
-    /*@GetMapping("/bookedSeat/{bookedSeatID}")
-    public BaseResponse findByID(@PathVariable int bookedSeatID){
+    @GetMapping("/bookedSeat/{bookedSeatID}")
+    public BaseResponse findByID(@PathVariable BookedSeat.BookedSeatKey bookedSeatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -44,7 +44,7 @@ public class BookedSeatRestController {
         }
 
         return res;
-    }*/
+    }
 
     @PostMapping("/bookedSeat")
     public BaseResponse insert(@RequestBody BookedSeat bookedSeat){

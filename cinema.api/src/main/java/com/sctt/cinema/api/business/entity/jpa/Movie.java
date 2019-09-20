@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Date;
+
 
 @Data
 @Entity
@@ -30,9 +32,14 @@ public class Movie implements Serializable {
     public String description;
 
     @Column
+    public Date dateFrom;
+
+    @Column
+    public Date dateTo;
+
+    @Column
     public int status;
 
     @Column
     public long baseTicketPrice;
-
 }

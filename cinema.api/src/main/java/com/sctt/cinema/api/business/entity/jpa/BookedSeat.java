@@ -14,29 +14,34 @@ import java.util.Objects;
 public class BookedSeat implements Serializable {
 
     @Id
-    public Integer seatID;
+    public int roomID;
 
     @Id
     public int showtimeID;
 
+    @Id
+    public String seatCode;
+
     @Data
     @AllArgsConstructor
     public static class BookedSeatKey implements Serializable{
-        public int seatID;
+        public int roomID;
         public int showtimeID;
+        public String seatCode;
 
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof BookedSeatKey)) return false;
             BookedSeatKey that = (BookedSeatKey) o;
-            return seatID == that.seatID &&
-                    showtimeID == that.showtimeID;
+            return roomID == that.roomID &&
+                    showtimeID == that.showtimeID &&
+                        seatCode == that.seatCode;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(seatID, showtimeID);
+            return Objects.hash(roomID, showtimeID, seatCode);
         }
     }
 
