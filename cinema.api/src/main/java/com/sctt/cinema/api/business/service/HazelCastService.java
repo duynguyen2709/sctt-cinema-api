@@ -4,8 +4,10 @@ import com.hazelcast.transaction.TransactionContext;
 import com.sctt.cinema.api.business.entity.CacheMaps;
 import com.sctt.cinema.api.business.entity.jpa.Movie;
 import com.sctt.cinema.api.business.entity.jpa.Theater;
+import com.sctt.cinema.api.business.entity.jpa.User;
 import com.sctt.cinema.api.business.repository.MovieRepository;
 import com.sctt.cinema.api.business.repository.TheaterRepository;
+import com.sctt.cinema.api.business.repository.UserRepository;
 import com.sctt.cinema.api.util.HazelCastUtils;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +27,9 @@ public class HazelCastService {
 
     @Autowired
     private TheaterRepository theaterRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MovieRepository movieRepository;
@@ -93,9 +98,28 @@ public class HazelCastService {
             case MOVIE:
                 return loadMovieMap();
 
+            case USER:
+                return loadUserMap();
+
             case ALL:
             default:
                  return null;
         }
+    }
+
+    private Map loadUserMap() {
+        if (CacheMaps.USER_MAP != null) {
+            CacheMaps.USER_MAP.clear();
+            CacheMaps.USER_MAP = null;
+        }
+
+        Map<String, User> map = new HashMap<>();
+
+        userRepository.findAll().forEach(c -> map.put(c.email,c));
+
+        CacheMaps.USER_MAP = reload(map, CacheKeyEnum.USER);
+        log.info("USER_MAP loaded succeed");
+
+        return CacheMaps.USER_MAP;
     }
 }

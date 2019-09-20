@@ -1,6 +1,9 @@
 package com.sctt.cinema.api.authentication;
 
 
+import com.sctt.cinema.api.business.entity.DTO.LoginDTO;
+import com.sctt.cinema.api.business.entity.DTO.UserDTO;
+import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
@@ -28,16 +31,26 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/authenticate")
     public BaseResponse createAuthenticationToken(@RequestBody JwtRequest req) {
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(req.username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(req.username);
 
-            final String token = jwtTokenUtil.generateToken(userDetails);
+            LoginDTO response = new LoginDTO();
 
-            return BaseResponse.setResponse(ReturnCodeEnum.SUCCESS, token);
+            String token = jwtTokenUtil.generateToken(userDetails);
+            UserDTO user = new UserDTO();
+            user.clone(userService.findById(req.username));
+
+            response.token = token;
+            response.user = user;
+
+            return BaseResponse.setResponse(ReturnCodeEnum.SUCCESS, response);
 
         } catch (BadCredentialsException e){
             return new BaseResponse(ReturnCodeEnum.WRONG_USERNAME_OR_PASSWORD);

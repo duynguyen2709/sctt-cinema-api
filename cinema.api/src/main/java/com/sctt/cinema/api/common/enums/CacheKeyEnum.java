@@ -5,6 +5,7 @@ public enum CacheKeyEnum {
     THEATER,
     MOVIE,
     PROVINCE_THEATER,
+    USER,
     ALL;
 
     public static CacheKeyEnum getKey(String type){
