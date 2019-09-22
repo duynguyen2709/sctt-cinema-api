@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.entity.DTO;
 
+import com.sctt.cinema.api.business.entity.jpa.Showtime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -2,6 +2,8 @@ package com.sctt.cinema.api.business.entity.jpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,9 +31,12 @@ public class Seat implements Serializable {
 
     @Data
     @AllArgsConstructor
+    //@RequiredArgsConstructor
+    @NoArgsConstructor(force = true)
     public static class SeatID implements Serializable{
         public int roomID;
         public String seatCode;
+
 
         @Override
         public boolean equals(Object o) {

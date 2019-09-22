@@ -52,6 +52,7 @@ public class SeatRestController {
 
         try{
             res.data = repo.save(seat);
+
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

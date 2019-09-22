@@ -22,7 +22,7 @@ public class Room implements Serializable {
 
     @Column
     public int roomType;
-
+/*
     public int totalNormalSeat = 0;
-    public int totalVIPSeat = 0;
+    public int totalVIPSeat = 0;*/
 }
