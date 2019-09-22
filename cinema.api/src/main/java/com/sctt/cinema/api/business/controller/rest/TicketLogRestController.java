@@ -18,7 +18,7 @@ public class TicketLogRestController {
     @Autowired
     private TicketLogRepository repo;
 
-    @GetMapping("/ticketLog")
+    @GetMapping("/ticketlogs")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,7 +32,7 @@ public class TicketLogRestController {
         return res;
     }
 
-    @GetMapping("/ticketLog/{ticketLogID}")
+    @GetMapping("/ticketlogs/{ticketLogID}")
     public BaseResponse findByID(@PathVariable String ticketLogID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -46,7 +46,7 @@ public class TicketLogRestController {
         return res;
     }
 
-    @PostMapping("/ticketLog")
+    @PostMapping("/ticketlogs")
     public BaseResponse insert(@RequestBody TicketLog ticketLog){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class TicketLogRestController {
         return res;
     }
 
-    @PutMapping("/ticketLog/{ticketLogID}")
+    @PutMapping("/ticketlogs/{ticketLogID}")
     public BaseResponse insert(@PathVariable String ticketLogID,@RequestBody TicketLog ticketLog){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,7 +74,7 @@ public class TicketLogRestController {
         return res;
     }
 
-    @DeleteMapping("/ticketLog/{ticketLogID}")
+    @DeleteMapping("/ticketlogs/{ticketLogID}")
     public BaseResponse delete(@PathVariable String ticketLogID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 

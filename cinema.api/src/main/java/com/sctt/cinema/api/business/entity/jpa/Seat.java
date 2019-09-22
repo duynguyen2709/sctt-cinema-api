@@ -24,10 +24,10 @@ public class Seat implements Serializable {
     public int seatType;
 
     @Column
-    public int row;
+    public int rowNo;
 
     @Column
-    public int column;
+    public int columnNo;
 
     @Data
     @AllArgsConstructor
@@ -37,6 +37,13 @@ public class Seat implements Serializable {
         public int roomID;
         public String seatCode;
 
+        public SeatID(String stringID){
+            this.roomID = Integer.parseInt(stringID.substring(0, stringID.indexOf("_")));
+            this.seatCode = stringID.substring(stringID.indexOf("_") + 1);
+
+            int temp = 1;
+
+        }
 
         @Override
         public boolean equals(Object o) {

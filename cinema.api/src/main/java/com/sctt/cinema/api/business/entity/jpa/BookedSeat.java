@@ -29,6 +29,12 @@ public class BookedSeat implements Serializable {
         public int showtimeID;
         public String seatCode;
 
+        public BookedSeatKey(String stringID){
+            this.roomID = Integer.parseInt(stringID.substring(0, stringID.indexOf("_")));
+            this.showtimeID = Integer.parseInt(stringID.substring(stringID.indexOf("_") + 1, stringID.lastIndexOf("_")));
+            this.seatCode = stringID.substring(stringID.lastIndexOf("_") + 1);
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;

@@ -18,7 +18,7 @@ public class MovieRestController {
     @Autowired
     private MovieRepository repo;
 
-    @GetMapping("/movie")
+    @GetMapping("/movies")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,7 +32,7 @@ public class MovieRestController {
         return res;
     }
 
-    @GetMapping("/movie/{movieID}")
+    @GetMapping("/movies/{movieID}")
     public BaseResponse findByID(@PathVariable int movieID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -46,7 +46,7 @@ public class MovieRestController {
         return res;
     }
 
-    @PostMapping("/movie")
+    @PostMapping("/movies")
     public BaseResponse insert(@RequestBody Movie movie){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class MovieRestController {
         return res;
     }
 
-    @PutMapping("/movie/{movieID}")
+    @PutMapping("/movies/{movieID}")
     public BaseResponse insert(@PathVariable String movieID,@RequestBody Movie movie){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,7 +74,7 @@ public class MovieRestController {
         return res;
     }
 
-    @DeleteMapping("/movie/{movieID}")
+    @DeleteMapping("/movies/{movieID}")
     public BaseResponse delete(@PathVariable int movieID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 

@@ -18,7 +18,7 @@ public class ShowtimeRestController {
     @Autowired
     private ShowtimeRepository repo;
 
-    @GetMapping("/showtime")
+    @GetMapping("/showtimes")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,7 +32,7 @@ public class ShowtimeRestController {
         return res;
     }
 
-    @GetMapping("/showtime/{showtimeID}")
+    @GetMapping("/showtimes/{showtimeID}")
     public BaseResponse findByID(@PathVariable int showtimeID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -46,7 +46,7 @@ public class ShowtimeRestController {
         return res;
     }
 
-    @PostMapping("/showtime")
+    @PostMapping("/showtimes")
     public BaseResponse insert(@RequestBody Showtime showtime){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class ShowtimeRestController {
         return res;
     }
 
-    @PutMapping("/showtime/{showtimeID}")
+    @PutMapping("/showtimes/{showtimeID}")
     public BaseResponse insert(@PathVariable String showtimeID,@RequestBody Showtime showtime){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,7 +74,7 @@ public class ShowtimeRestController {
         return res;
     }
 
-    @DeleteMapping("/showtime/{showtimeID}")
+    @DeleteMapping("/showtimes/{showtimeID}")
     public BaseResponse delete(@PathVariable int showtimeID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 

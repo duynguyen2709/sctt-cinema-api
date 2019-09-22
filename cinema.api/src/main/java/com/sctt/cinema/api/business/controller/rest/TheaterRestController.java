@@ -18,7 +18,7 @@ public class TheaterRestController {
     @Autowired
     private TheaterRepository repo;
 
-    @GetMapping("/theater")
+    @GetMapping("/theaters")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,7 +32,7 @@ public class TheaterRestController {
         return res;
     }
 
-    @GetMapping("/theater/{theaterID}")
+    @GetMapping("/theaters/{theaterID}")
     public BaseResponse findByID(@PathVariable String theaterID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -46,7 +46,7 @@ public class TheaterRestController {
         return res;
     }
 
-    @PostMapping("/theater")
+    @PostMapping("/theaters")
     public BaseResponse insert(@RequestBody Theater theater){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class TheaterRestController {
         return res;
     }
 
-    @PutMapping("/theater/{theaterID}")
+    @PutMapping("/theaters/{theaterID}")
     public BaseResponse insert(@PathVariable String theaterID,@RequestBody Theater theater){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,7 +74,7 @@ public class TheaterRestController {
         return res;
     }
 
-    @DeleteMapping("/theater/{theaterID}")
+    @DeleteMapping("/theaters/{theaterID}")
     public BaseResponse delete(@PathVariable String theaterID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 

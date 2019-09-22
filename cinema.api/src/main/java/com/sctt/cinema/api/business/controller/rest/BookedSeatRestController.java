@@ -18,7 +18,7 @@ public class BookedSeatRestController {
     @Autowired
     private BookedSeatRepository repo;
 
-    @GetMapping("/bookedSeat")
+    @GetMapping("/bookedseats")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,12 +32,12 @@ public class BookedSeatRestController {
         return res;
     }
 
-    @GetMapping("/bookedSeat/{bookedSeatID}")
-    public BaseResponse findByID(@PathVariable BookedSeat.BookedSeatKey bookedSeatID){
+    @GetMapping("/bookedseats/{bookedSeatID}")
+    public BaseResponse findByID(@PathVariable String bookedSeatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.findById(bookedSeatID).get();
+            res.data = repo.findById(new BookedSeat.BookedSeatKey(bookedSeatID)).get();
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -46,7 +46,7 @@ public class BookedSeatRestController {
         return res;
     }
 
-    @PostMapping("/bookedSeat")
+    @PostMapping("/bookedseats")
     public BaseResponse insert(@RequestBody BookedSeat bookedSeat){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class BookedSeatRestController {
         return res;
     }
 
-    @PutMapping("/bookedSeat/{bookedSeatID}")
+    @PutMapping("/bookedseats/{bookedSeatID}")
     public BaseResponse insert(@PathVariable String bookedSeatID,@RequestBody BookedSeat bookedSeat){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,12 +74,12 @@ public class BookedSeatRestController {
         return res;
     }
 
-   /* @DeleteMapping("/bookedSeat/{bookedSeatID}")
-    public BaseResponse delete(@PathVariable int bookedSeatID){
+    @DeleteMapping("/bookedSeat/{bookedSeatID}")
+    public BaseResponse delete(@PathVariable String bookedSeatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            repo.deleteById(bookedSeatID);
+            repo.deleteById(new BookedSeat.BookedSeatKey(bookedSeatID));
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());
@@ -87,5 +87,5 @@ public class BookedSeatRestController {
         }
 
         return res;
-    }*/
+    }
 }

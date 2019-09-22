@@ -18,7 +18,7 @@ public class RoomRestController {
     @Autowired
     private RoomRepository repo;
 
-    @GetMapping("/room")
+    @GetMapping("/rooms")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,7 +32,7 @@ public class RoomRestController {
         return res;
     }
 
-    @GetMapping("/room/{roomID}")
+    @GetMapping("/rooms/{roomID}")
     public BaseResponse findByID(@PathVariable int roomID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -46,7 +46,7 @@ public class RoomRestController {
         return res;
     }
 
-    @PostMapping("/room")
+    @PostMapping("/rooms")
     public BaseResponse insert(@RequestBody Room room){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -60,7 +60,7 @@ public class RoomRestController {
         return res;
     }
 
-    @PutMapping("/room/{roomID}")
+    @PutMapping("/rooms/{roomID}")
     public BaseResponse insert(@PathVariable String roomID,@RequestBody Room room){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -74,7 +74,7 @@ public class RoomRestController {
         return res;
     }
 
-    @DeleteMapping("/room/{roomID}")
+    @DeleteMapping("/rooms/{roomID}")
     public BaseResponse delete(@PathVariable int roomID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 

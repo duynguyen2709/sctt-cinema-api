@@ -18,7 +18,7 @@ public class SeatRestController {
     @Autowired
     private SeatRepository repo;
 
-    @GetMapping("/seat")
+    @GetMapping("/seats")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -32,12 +32,12 @@ public class SeatRestController {
         return res;
     }
 
-    @GetMapping("/seat/{seatID}")
-    public BaseResponse findByID(@PathVariable Seat.SeatID seatID){
+    @GetMapping("/seats/{seatID}")
+    public BaseResponse findByID(@PathVariable String seatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = repo.findById(seatID).get();
+            res.data = repo.findById(new Seat.SeatID(seatID)).get();
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -46,13 +46,12 @@ public class SeatRestController {
         return res;
     }
 
-    @PostMapping("/seat")
+    @PostMapping("/seats")
     public BaseResponse insert(@RequestBody Seat seat){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
             res.data = repo.save(seat);
-
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -61,7 +60,7 @@ public class SeatRestController {
         return res;
     }
 
-    @PutMapping("/seat/{seatID}")
+    @PutMapping("/seats/{seatID}")
     public BaseResponse insert(@PathVariable String seatID,@RequestBody Seat seat){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -75,7 +74,7 @@ public class SeatRestController {
         return res;
     }
 
-    @DeleteMapping("/seat/{seatID}")
+    @DeleteMapping("/seats/{seatID}")
     public BaseResponse delete(@PathVariable Seat.SeatID seatID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
