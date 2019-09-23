@@ -20,10 +20,10 @@ public class BuzConfig implements Serializable {
     public String section;
 
     @Column
-    public String key;
+    public String buzKey;
 
     @Column
-    public String value;
+    public String buzValue;
 
     @Column
     public String description;

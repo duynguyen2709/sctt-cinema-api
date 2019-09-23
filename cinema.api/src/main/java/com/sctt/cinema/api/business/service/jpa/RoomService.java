@@ -1,6 +1,8 @@
 package com.sctt.cinema.api.business.service.jpa;
 
+import com.sctt.cinema.api.business.entity.jpa.Room;
 import com.sctt.cinema.api.business.entity.jpa.Theater;
+import com.sctt.cinema.api.business.repository.RoomRepository;
 import com.sctt.cinema.api.business.repository.TheaterRepository;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import com.sctt.cinema.api.common.enums.ProvinceEnum;
@@ -16,45 +18,45 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class TheaterService extends BaseJPAService<Theater,Integer>{
+public class RoomService extends BaseJPAService<Room,Integer>{
 
     @Autowired
-    private TheaterRepository repo;
+    private RoomRepository repo;
 
     @Override
     @EventListener(ApplicationReadyEvent.class)
     protected void init() {
-        loadCacheMap(CacheKeyEnum.THEATER);
+        loadCacheMap(CacheKeyEnum.ROOM);
     }
 
     @Override
-    public List<Theater> findAll() {
-        List<Theater> list = new ArrayList<>(cacheMap.values());
+    public List<Room> findAll() {
+        List<Room> list = new ArrayList<>(cacheMap.values());
 
         return list;
     }
 
     @Override
-    public Theater create(Theater theater) {
-        Theater t = repo.save(theater);
+    public Room create(Room room) {
+        Room t = repo.save(room);
 
-        cacheMap.put(t.theaterID,t);
-
-        return t;
-    }
-
-    @Override
-    public Theater update(Theater theater) {
-        Theater t = repo.save(theater);
-
-        cacheMap.replace(t.theaterID,t);
+        cacheMap.put(t.roomID,t);
 
         return t;
     }
 
     @Override
-    public Theater findById(Integer key) {
-        Theater t = cacheMap.get(key);
+    public Room update(Room room) {
+        Room t = repo.save(room);
+
+        cacheMap.replace(t.roomID,t);
+
+        return t;
+    }
+
+    @Override
+    public Room findById(Integer key) {
+        Room t = cacheMap.get(key);
 
         return t;
     }
@@ -63,20 +65,5 @@ public class TheaterService extends BaseJPAService<Theater,Integer>{
     public void delete(Integer key) {
         repo.deleteById(key);
         cacheMap.remove(key);
-    }
-
-    public Map<String,List<Theater>> getProvinceTheaterMap(){
-        Map<String,List<Theater>> res = new HashMap<>();
-
-        cacheMap.values().forEach(c -> {
-            String provinceName = ProvinceEnum.fromInt(c.provinceCode).toString();
-
-            if (!res.containsKey(provinceName))
-                res.put(provinceName,new ArrayList<>());
-
-            res.get(provinceName).add(c);
-        });
-
-        return res;
     }
 }

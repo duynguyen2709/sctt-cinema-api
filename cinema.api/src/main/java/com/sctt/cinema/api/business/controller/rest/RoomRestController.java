@@ -1,7 +1,8 @@
 package com.sctt.cinema.api.business.controller.rest;
 
-import com.sctt.cinema.api.business.entity.jpa.Theater;
-import com.sctt.cinema.api.business.service.jpa.TheaterService;
+import com.sctt.cinema.api.business.entity.jpa.Room;
+import com.sctt.cinema.api.business.service.jpa.RoomService;
+import com.sctt.cinema.api.business.service.jpa.RoomService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
@@ -11,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Log4j2
-public class TheaterRestController {
+public class RoomRestController {
 
     @Autowired
-    private TheaterService service;
+    private RoomService service;
 
-    @GetMapping("/theaters")
+    @GetMapping("/rooms")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -30,12 +31,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @GetMapping("/theaters/{theaterID}")
-    public BaseResponse findByID(@PathVariable Integer theaterID){
+    @GetMapping("/rooms/{roomID}")
+    public BaseResponse findByID(@PathVariable Integer roomID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findById(theaterID);
+            res.data = service.findById(roomID);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -44,12 +45,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @PostMapping("/theaters")
-    public BaseResponse insert(@RequestBody Theater theater){
+    @PostMapping("/rooms")
+    public BaseResponse insert(@RequestBody Room entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.create(theater);
+            res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -58,27 +59,27 @@ public class TheaterRestController {
         return res;
     }
 
-    @PutMapping("/theaters/{theaterID}")
-    public BaseResponse update(@PathVariable Integer theaterID,@RequestBody Theater theater){
+    @PutMapping("/rooms/{roomID}")
+    public BaseResponse insert(@PathVariable Integer roomID,@RequestBody Room entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            theater.theaterID = theaterID;
-            res.data = service.update(theater);
+            entity.roomID = roomID;
+            res.data = service.update(entity);
         } catch (Exception e){
-            log.error("[update] ex: {}",e.getMessage());
+            log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
         return res;
     }
 
-    @DeleteMapping("/theaters/{theaterID}")
-    public BaseResponse delete(@PathVariable Integer theaterID){
+    @DeleteMapping("/rooms/{roomID}")
+    public BaseResponse delete(@PathVariable Integer roomID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            service.delete(theaterID);
+            service.delete(roomID);
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());

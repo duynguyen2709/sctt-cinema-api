@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 @Service
 public class MovieService extends BaseJPAService<Movie,Integer>{
 
@@ -33,8 +32,8 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
     }
 
     @Override
-    public Movie create(Movie theater) {
-        Movie t = repo.save(theater);
+    public Movie create(Movie entity) {
+        Movie t = repo.save(entity);
 
         cacheMap.put(t.movieID,t);
 
@@ -42,8 +41,8 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
     }
 
     @Override
-    public Movie update(Movie theater) {
-        Movie t = repo.save(theater);
+    public Movie update(Movie entity) {
+        Movie t = repo.save(entity);
 
         cacheMap.replace(t.movieID,t);
 

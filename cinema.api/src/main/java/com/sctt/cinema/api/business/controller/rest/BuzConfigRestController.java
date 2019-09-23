@@ -1,7 +1,7 @@
 package com.sctt.cinema.api.business.controller.rest;
 
-import com.sctt.cinema.api.business.entity.jpa.Theater;
-import com.sctt.cinema.api.business.service.jpa.TheaterService;
+import com.sctt.cinema.api.business.entity.jpa.BuzConfig;
+import com.sctt.cinema.api.business.service.jpa.BuzConfigService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Log4j2
-public class TheaterRestController {
+public class BuzConfigRestController {
 
     @Autowired
-    private TheaterService service;
+    private BuzConfigService service;
 
-    @GetMapping("/theaters")
-    public BaseResponse findAll(){
+    @GetMapping("/buzconfigs") public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -30,12 +29,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @GetMapping("/theaters/{theaterID}")
-    public BaseResponse findByID(@PathVariable Integer theaterID){
+    @GetMapping("/buzconfigs/{buzID}")
+    public BaseResponse findByID(@PathVariable Integer buzID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findById(theaterID);
+            res.data = service.findById(buzID);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -44,12 +43,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @PostMapping("/theaters")
-    public BaseResponse insert(@RequestBody Theater theater){
+    @PostMapping("/buzconfigs")
+    public BaseResponse insert(@RequestBody BuzConfig entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.create(theater);
+            res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -58,13 +57,13 @@ public class TheaterRestController {
         return res;
     }
 
-    @PutMapping("/theaters/{theaterID}")
-    public BaseResponse update(@PathVariable Integer theaterID,@RequestBody Theater theater){
+    @PutMapping("/buzconfigs/{buzID}")
+    public BaseResponse update(@PathVariable Integer buzID,@RequestBody BuzConfig entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            theater.theaterID = theaterID;
-            res.data = service.update(theater);
+            entity.buzID = buzID;
+            res.data = service.update(entity);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -73,12 +72,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @DeleteMapping("/theaters/{theaterID}")
-    public BaseResponse delete(@PathVariable Integer theaterID){
+    @DeleteMapping("/buzconfigs/{buzID}")
+    public BaseResponse delete(@PathVariable Integer buzID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            service.delete(theaterID);
+            service.delete(buzID);
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());

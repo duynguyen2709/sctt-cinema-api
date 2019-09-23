@@ -28,7 +28,7 @@ public class TicketLog implements Serializable {
     public int showtimeID;
 
     @Column
-    public String customerID;
+    public String email;
 
     @Column
     public String seatCodes;
