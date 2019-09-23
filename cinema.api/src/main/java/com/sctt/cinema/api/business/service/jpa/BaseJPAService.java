@@ -1,6 +1,6 @@
 package com.sctt.cinema.api.business.service.jpa;
 
-import com.sctt.cinema.api.business.service.HazelCastService;
+import com.sctt.cinema.api.business.service.CacheService;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,11 +12,11 @@ public abstract class BaseJPAService<T,K>  {
     protected Map<K,T> cacheMap = null;
 
     @Autowired
-    private HazelCastService hazelCastService;
+    private CacheService cacheService;
 
     protected void loadCacheMap(CacheKeyEnum type){
         if (cacheMap == null)
-            cacheMap = hazelCastService.loadCacheMap(type);
+            cacheMap = cacheService.loadCacheMap(type);
     }
 
     protected abstract void init();

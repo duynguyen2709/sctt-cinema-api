@@ -61,7 +61,7 @@ public class UserService extends BaseJPAService<User,String>{
 
     @Override
     public void delete(String key) {
-        cacheMap.remove(key);
         repo.deleteById(key);
+        cacheMap.remove(key);
     }
 }

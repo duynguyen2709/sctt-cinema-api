@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Service
 @Log4j2
-public class HazelCastService {
+public class CacheService {
 
     @Value("${hazelcast.useHazelCast}")
     private boolean useHazelcast;
@@ -50,7 +50,7 @@ public class HazelCastService {
             context.commitTransaction();
         } catch (Exception ex) {
             context.rollbackTransaction();
-            log.error(String.format("[HazelCastService] load [%s] ex: %s", hazelCastKey.name(), ex.getMessage()));
+            log.error(String.format("[CacheService] load [%s] ex: %s", hazelCastKey.name(), ex.getMessage()));
 
             return mapFromDb;
         }

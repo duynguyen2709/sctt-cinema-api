@@ -59,7 +59,7 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
 
     @Override
     public void delete(Integer key) {
-        cacheMap.remove(key);
         repo.deleteById(key);
+        cacheMap.remove(key);
     }
 }

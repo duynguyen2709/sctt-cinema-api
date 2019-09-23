@@ -62,8 +62,8 @@ public class TheaterService extends BaseJPAService<Theater,Integer>{
 
     @Override
     public void delete(Integer key) {
-        cacheMap.remove(key);
         repo.deleteById(key);
+        cacheMap.remove(key);
     }
 
     public Map<String,List<Theater>> getProvinceTheaterMap(){
