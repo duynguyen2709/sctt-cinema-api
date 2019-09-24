@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class TheaterService extends BaseJPAService<Theater,Integer>{
 
     @Override
     @EventListener(ApplicationReadyEvent.class)
+    @Order(2)
     protected void init() {
         loadCacheMap(CacheKeyEnum.THEATER);
     }

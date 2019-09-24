@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.service.jpa;
 
+import com.sctt.cinema.api.business.entity.request.OrderEntity;
 import com.sctt.cinema.api.business.service.CacheService;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +26,5 @@ public abstract class BaseJPAService<T,K>  {
     public abstract T update(T t);
     public abstract T findById(K key);
     public abstract void delete(K key);
+
 }

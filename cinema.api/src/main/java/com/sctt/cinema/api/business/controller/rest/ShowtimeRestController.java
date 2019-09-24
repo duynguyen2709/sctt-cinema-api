@@ -37,6 +37,8 @@ public class ShowtimeRestController {
 
         try{
             res.data = service.findById(showtimeID);
+            if (res.data == null)
+                res = new BaseResponse(ReturnCodeEnum.SHOWTIME_NOT_FOUND);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

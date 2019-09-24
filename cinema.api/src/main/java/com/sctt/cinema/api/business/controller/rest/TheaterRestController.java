@@ -36,6 +36,8 @@ public class TheaterRestController {
 
         try{
             res.data = service.findById(theaterID);
+            if (res.data == null)
+                res = new BaseResponse(ReturnCodeEnum.THEATER_NOT_FOUND);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

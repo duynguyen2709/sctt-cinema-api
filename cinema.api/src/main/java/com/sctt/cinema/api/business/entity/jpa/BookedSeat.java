@@ -2,6 +2,7 @@ package com.sctt.cinema.api.business.entity.jpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,8 @@ import java.util.Objects;
 @Entity
 @Table(name="BookedSeat")
 @IdClass(BookedSeat.BookedSeatKey.class)
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookedSeat implements Serializable {
 
     @Id

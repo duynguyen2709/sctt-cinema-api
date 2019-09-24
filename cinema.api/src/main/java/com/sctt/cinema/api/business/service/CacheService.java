@@ -197,7 +197,7 @@ public class CacheService {
             CacheMaps.TICKET_LOG_MAP = null;
         }
 
-        Map<String, TicketLog> map = new HashMap<>();
+        Map<Long, TicketLog> map = new HashMap<>();
 
         ticketLogRepository.findAll().forEach(c -> map.put(c.ticketID,c));
 

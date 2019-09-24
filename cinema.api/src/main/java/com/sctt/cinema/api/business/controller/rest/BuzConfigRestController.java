@@ -35,6 +35,8 @@ public class BuzConfigRestController {
 
         try{
             res.data = service.findById(buzID);
+            if (res.data == null)
+                res = new BaseResponse(ReturnCodeEnum.BUZ_CONFIG_NOT_FOUND);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

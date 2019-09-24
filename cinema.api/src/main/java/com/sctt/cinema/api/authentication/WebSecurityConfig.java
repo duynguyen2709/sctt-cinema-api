@@ -59,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         List<String> antPatterns = new ArrayList<>();
         antPatterns.add("/authenticate");
         antPatterns.add("/client/public/**");
+        if (IS_DEBUG_MODE)
+            antPatterns.add("/client/private/**");
 
         //if (IS_DEBUG_MODE)
             antPatterns.add("/api/**");

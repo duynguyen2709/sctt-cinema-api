@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Data
@@ -21,8 +22,10 @@ import java.util.List;
 @Table(name="TicketLog")
 public class TicketLog implements Serializable {
 
+    public static long serialVersionUID = 6235891346674782026L;
+
     @Id
-    public String ticketID;
+    public Long ticketID;
 
     @Column
     public int showtimeID;
@@ -36,8 +39,14 @@ public class TicketLog implements Serializable {
     @Column
     public long totalPrice;
 
+    @Column(nullable = true)
+    public Timestamp orderTime;
+
     @Column
     public String extraInfo;
+
+    @Column
+    public int status;
 
     public List<String> getSeatCodes(){
         try {
@@ -52,5 +61,13 @@ public class TicketLog implements Serializable {
 
     public void setSeatCodes(List<String> seatCodes){
         this.seatCodes = GsonUtils.toJsonString(seatCodes);
+    }
+
+    public long getOrderTime(){
+        return orderTime.getTime();
+    }
+
+    public void setOrderTime(long timestamp){
+        this.orderTime = new Timestamp(timestamp);
     }
 }

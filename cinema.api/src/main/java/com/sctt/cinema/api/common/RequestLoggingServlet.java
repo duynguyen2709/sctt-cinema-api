@@ -49,6 +49,7 @@ public class RequestLoggingServlet extends DispatcherServlet {
             if (logEnt.method.equalsIgnoreCase("POST") ||
                     logEnt.method.equalsIgnoreCase("PUT")) {
                 logEnt.body = GsonUtils.fromJsonString(request.getBody(), Object.class).toString();
+            } else {
                 logEnt.body = null;
             }
             logEnt.response = getResponsePayload(responseToCache);

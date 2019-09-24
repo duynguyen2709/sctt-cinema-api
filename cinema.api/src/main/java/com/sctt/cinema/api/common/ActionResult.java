@@ -14,6 +14,7 @@ public class ActionResult implements Serializable {
     public String stepResult = "";
     public String exception = "";
     public long startTime = 0L;
+    public long endTime = 0L;
 
     public ActionResult(){
         startTime = System.currentTimeMillis();

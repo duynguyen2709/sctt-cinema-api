@@ -1,6 +1,7 @@
 package com.sctt.cinema.api;
 
-import com.sctt.cinema.api.business.service.jpa.MovieService;
+import com.sctt.cinema.api.business.config.ActiveMQConfig;
+import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
 import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,20 @@ public class Application {
 	private int port;
 
 	@Autowired
-	private MovieService movieService;
+	private ActiveMQConfig amqConf;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
-
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void Init(){
 		try {
 
 			log.info("=============== Application Initializing... ===============");
+
+			log.info(String.format("\nAMQConf: %s",GsonUtils.toJsonString(amqConf)));
+			ActiveMQProducer.jmsTemplate = amqConf.jmsTemplate();
 
 			log.info("Application Started on Port {}", port);
 			log.info("=============== Application Init Done ===============");

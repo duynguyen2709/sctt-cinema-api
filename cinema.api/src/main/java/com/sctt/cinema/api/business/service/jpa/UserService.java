@@ -9,6 +9,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class UserService extends BaseJPAService<User,String>{
 
     @Override
     @EventListener(ApplicationReadyEvent.class)
+    @Order(2)
     protected void init() {
         loadCacheMap(CacheKeyEnum.USER);
     }
@@ -34,19 +37,23 @@ public class UserService extends BaseJPAService<User,String>{
     }
 
     @Override
-    public User create(User theater) {
-        User t = repo.save(theater);
+    public User create(User user) {
+        user.password = new BCryptPasswordEncoder().encode(user.password);
+        User t = repo.save(user);
 
-        cacheMap.put(t.email,t);
+        cacheMap.put(t.email, t);
 
         return t;
     }
 
     @Override
-    public User update(User theater) {
-        User t = repo.save(theater);
+    public User update(User user) {
+        User old = findById(user.email);
+        user.password = old.password;
 
-        cacheMap.replace(t.email,t);
+        User t = repo.save(user);
+
+        cacheMap.replace(t.email, t);
 
         return t;
     }
@@ -62,5 +69,15 @@ public class UserService extends BaseJPAService<User,String>{
     public void delete(String key) {
         repo.deleteById(key);
         cacheMap.remove(key);
+    }
+
+    public User updatePassword(User user){
+        User old = findById(user.email);
+        old.password = new BCryptPasswordEncoder().encode(user.password);
+        User t = repo.save(old);
+
+        cacheMap.replace(t.email, t);
+
+        return t;
     }
 }

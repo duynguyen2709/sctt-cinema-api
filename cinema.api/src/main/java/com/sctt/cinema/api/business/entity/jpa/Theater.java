@@ -1,6 +1,8 @@
 package com.sctt.cinema.api.business.entity.jpa;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +10,8 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name="Theater")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Theater implements Serializable {
 
     @Id

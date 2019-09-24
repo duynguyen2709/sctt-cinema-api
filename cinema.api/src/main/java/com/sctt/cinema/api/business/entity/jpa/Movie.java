@@ -1,6 +1,8 @@
 package com.sctt.cinema.api.business.entity.jpa;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,6 +11,8 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name="Movie")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Movie implements Serializable {
 
     @Id

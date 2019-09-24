@@ -2,6 +2,7 @@ package com.sctt.cinema.api.business.service.jpa;
 
 import com.sctt.cinema.api.business.entity.jpa.BookedSeat;
 import com.sctt.cinema.api.business.entity.jpa.Seat;
+import com.sctt.cinema.api.business.entity.request.OrderEntity;
 import com.sctt.cinema.api.business.repository.BookedSeatRepository;
 import com.sctt.cinema.api.business.repository.SeatRepository;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class BookedSeatService extends BaseJPAService<BookedSeat, String>{
 
     @Override
     @EventListener(ApplicationReadyEvent.class)
+    @Order(2)
     protected void init() {
         loadCacheMap(CacheKeyEnum.BOOKED_SEAT);
     }
@@ -62,5 +65,12 @@ public class BookedSeatService extends BaseJPAService<BookedSeat, String>{
     public void delete(String key) {
         repo.deleteById(new BookedSeat.BookedSeatKey(key));
         cacheMap.remove(key);
+    }
+
+    public void batchInsert(OrderEntity order){
+        for (String s : order.seatCodes){
+            BookedSeat seat = new BookedSeat(order.roomID, s, order.showtimeID);
+            this.create(seat);
+        }
     }
 }

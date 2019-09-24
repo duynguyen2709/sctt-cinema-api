@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 public enum ReturnCodeEnum {
 
+    INIT(2),
     SUCCESS(1),
     EXCEPTION(0),
     UNAUTHORIZE(-401),
@@ -19,6 +20,18 @@ public enum ReturnCodeEnum {
     CHECK_SIG_NOT_MATCH(-7),
     TIME_LIMIT_EXCEED(-8),
     REPLAY_ATTACK_BLOCKED(-9),
+
+    USER_NOT_FOUND(-10),
+    SHOWTIME_NOT_FOUND(-11),
+    THEATER_NOT_FOUND(-12),
+    MOVIE_NOT_FOUND(-13),
+    ROOM_NOT_FOUND(-14),
+    BUZ_CONFIG_NOT_FOUND(-15),
+    TICKET_NOT_FOUND(-16),
+    BOOKED_SEAT_NOT_FOUND(-17),
+    SEAT_NOT_FOUND(-18),
+
+    SEAT_NOT_EMPTY(-19),
     ;
 
 

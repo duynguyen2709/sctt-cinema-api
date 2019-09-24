@@ -1,6 +1,7 @@
 package com.sctt.cinema.api.authentication;
 
 import com.sctt.cinema.api.business.repository.UserRepository;
+import com.sctt.cinema.api.business.service.jpa.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,14 +16,14 @@ import java.util.Optional;
 public class JwtUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository repo;
+    private UserService service;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<com.sctt.cinema.api.business.entity.jpa.User> user = repo.findById(username);
-        if (user.isPresent())
-            return new User(username, user.get().password, new ArrayList<>());
+        com.sctt.cinema.api.business.entity.jpa.User user = service.findById(username);
+        if (user != null)
+            return new User(username, user.password, new ArrayList<>());
         else
             throw new UsernameNotFoundException("User not found with username: " + username);
     }

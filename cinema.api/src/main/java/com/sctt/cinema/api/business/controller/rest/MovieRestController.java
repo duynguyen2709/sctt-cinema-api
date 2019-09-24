@@ -37,6 +37,8 @@ public class MovieRestController {
 
         try{
             res.data = service.findById(movieID);
+            if (res.data == null)
+                res = new BaseResponse(ReturnCodeEnum.MOVIE_NOT_FOUND);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
