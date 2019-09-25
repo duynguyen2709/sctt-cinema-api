@@ -12,18 +12,20 @@ import java.io.Serializable;
 @Table(name="Room")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room implements Serializable {
+public class Room extends BaseJPAEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     public Integer roomID;
 
     @Column
-    public int roomType;
-
-    @Column
     public int roomNumber;
 
     @Column
     public int theaterID;
+
+    @Override
+    public boolean isValid() {
+        return roomNumber > 0 & theaterID > 0;
+    }
 }

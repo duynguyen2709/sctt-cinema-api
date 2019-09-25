@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Table(name="Showtime")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Showtime implements Serializable {
+public class Showtime extends BaseJPAEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class Showtime implements Serializable {
     @Column
     public Timestamp timeFrom;
 
-    @Column
+    @Column(nullable = true)
     public Timestamp timeTo;
 
     @Column
@@ -53,4 +53,11 @@ public class Showtime implements Serializable {
         this.timeTo = new Timestamp(timestamp);
     }
 
+    @Override
+    public boolean isValid() {
+        return movieID > 0 &&
+                (movieFormat == 0 || movieFormat == 1) &&
+                getTimeFrom() > 0 && getTimeTo() > 0 &&
+                (status == 0 || status == 1);
+    }
 }

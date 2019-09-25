@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Table(name="User")
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+public class User extends BaseJPAEntity {
 
     @Id
     public String email;
@@ -39,4 +39,11 @@ public class User implements Serializable {
     @Column
     public Timestamp creationDate;
 
+    @Override
+    public boolean isValid() {
+        return !email.isEmpty() && !password.isEmpty() &&
+                !fullName.isEmpty() && !phoneNumber.isEmpty()
+                && (role == 0 || role == 1 || role == 2)
+                 && (status == 1 || status == 0);
+    }
 }

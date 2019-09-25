@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.controller.client;
 
+import com.sctt.cinema.api.business.entity.jpa.BookedSeat;
 import com.sctt.cinema.api.business.entity.jpa.Showtime;
 import com.sctt.cinema.api.business.entity.jpa.TicketLog;
 import com.sctt.cinema.api.business.entity.jpa.User;
@@ -142,12 +143,18 @@ public class ClientPrivateController {
         Showtime showtime = showtimeService.findById(entity.showtimeID);
         long timeStart = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
         long delaySecond = (timeStart - System.currentTimeMillis()) / 1000;
+        long delaySecondEnd = (showtime.getTimeTo() - System.currentTimeMillis()) / 1000;
 
         if (delaySecond <= 0){
             throw new Exception("[sendTicketProcessQueue] delaySecond < 0");
         }
 
         producer.sendTicketLogProcessQueue(ticket, delaySecond);
+
+        for (String s : entity.seatCodes){
+            BookedSeat seat = new BookedSeat(entity.roomID, s, entity.showtimeID);
+            producer.sendBookedSeatRemoveQueue(seat, delaySecondEnd);
+        }
     }
 
     private long calculateTicketPrice(OrderEntity entity) {

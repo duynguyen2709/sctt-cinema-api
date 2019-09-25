@@ -13,7 +13,7 @@ import java.sql.Date;
 @Table(name="Movie")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Movie implements Serializable {
+public class Movie extends BaseJPAEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -49,4 +49,10 @@ public class Movie implements Serializable {
     @Column
     public long baseTicketPrice;
 
+    @Override
+    public boolean isValid() {
+        return !movieName.isEmpty() && !imageURL.isEmpty() && !trailerURL.isEmpty()
+                && dateFrom != null && dateTo != null && baseTicketPrice > 0
+                && (status == 0 || status == 1 || status == 2);
+    }
 }

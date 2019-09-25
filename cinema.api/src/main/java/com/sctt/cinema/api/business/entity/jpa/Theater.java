@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Table(name="Theater")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Theater implements Serializable {
+public class Theater extends BaseJPAEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -26,4 +26,9 @@ public class Theater implements Serializable {
 
     @Column
     public int provinceCode;
+
+    @Override
+    public boolean isValid() {
+        return !theaterName.isEmpty() && !address.isEmpty() && provinceCode > 0;
+    }
 }

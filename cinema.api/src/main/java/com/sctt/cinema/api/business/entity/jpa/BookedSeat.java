@@ -15,7 +15,7 @@ import java.util.Objects;
 @IdClass(BookedSeat.BookedSeatKey.class)
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookedSeat implements Serializable {
+public class BookedSeat extends BaseJPAEntity {
 
     @Id
     public int roomID;
@@ -28,6 +28,11 @@ public class BookedSeat implements Serializable {
 
     public String getKey(){
         return this.roomID + "_" + this.seatCode + "_" + this.showtimeID;
+    }
+
+    @Override
+    public boolean isValid() {
+        return roomID > 0 && showtimeID > 0 && !seatCode.isEmpty();
     }
 
     @Data

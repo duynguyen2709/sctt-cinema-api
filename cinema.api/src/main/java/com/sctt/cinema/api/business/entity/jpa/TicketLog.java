@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name="TicketLog")
-public class TicketLog implements Serializable {
+public class TicketLog extends BaseJPAEntity {
 
     public static long serialVersionUID = 6235891346674782026L;
 
@@ -69,5 +69,10 @@ public class TicketLog implements Serializable {
 
     public void setOrderTime(long timestamp){
         this.orderTime = new Timestamp(timestamp);
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
     }
 }

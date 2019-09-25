@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,9 @@ public class UserService extends BaseJPAService<User,String>{
 
     @Override
     public User create(User user) {
+        user.creationDate = new Timestamp(System.currentTimeMillis());
+        user.status = 1;
+        user.totalAccumulation = 0;
         user.password = new BCryptPasswordEncoder().encode(user.password);
         User t = repo.save(user);
 

@@ -13,7 +13,7 @@ import java.util.Objects;
 @Table(name="BuzConfig")
 @AllArgsConstructor
 @NoArgsConstructor
-public class BuzConfig implements Serializable {
+public class BuzConfig extends BaseJPAEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -30,4 +30,8 @@ public class BuzConfig implements Serializable {
 
     @Column
     public String description;
+
+    @Override public boolean isValid() {
+        return !section.isEmpty() && !buzKey.isEmpty() && !buzValue.isEmpty();
+    }
 }

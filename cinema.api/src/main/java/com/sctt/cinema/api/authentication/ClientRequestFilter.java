@@ -48,19 +48,21 @@ public class ClientRequestFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
-        ReturnCodeEnum res = getParam(servletRequest);
-        if (res != ReturnCodeEnum.SUCCESS) {
-            servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
-            return;
-        }
+        if (!IS_DEBUG_MODE) {
+            ReturnCodeEnum res = getParam(servletRequest);
+            if (res != ReturnCodeEnum.SUCCESS) {
+                servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
+                return;
+            }
 
-        res = validateParam();
-        if (res != ReturnCodeEnum.SUCCESS){
-            servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
-            return;
-        }
+            res = validateParam();
+            if (res != ReturnCodeEnum.SUCCESS) {
+                servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
+                return;
+            }
 
-        REQUEST_VALIDATION_MAP.put(this.reqdate,this.reqdate + TIME_LIMIT);
+            REQUEST_VALIDATION_MAP.put(this.reqdate, this.reqdate + TIME_LIMIT);
+        }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
