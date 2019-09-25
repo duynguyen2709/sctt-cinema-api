@@ -1,5 +1,8 @@
 package com.sctt.cinema.api.business.entity.jpa;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sctt.cinema.api.util.GsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,6 +39,9 @@ public class Movie extends BaseJPAEntity {
     public String trailerURL;
 
     @Column
+    public String screenshots;
+
+    @Column
     public String description;
 
     @Column
@@ -48,6 +55,22 @@ public class Movie extends BaseJPAEntity {
 
     @Column
     public long baseTicketPrice;
+
+    public List<String> getScreenshots(){
+        try {
+            ObjectMapper                mapper  = new ObjectMapper();
+            TypeReference<List<String>> typeRef = new TypeReference<List<String>>() {};
+
+            return mapper.readValue(screenshots, typeRef);
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    public void setScreenshots(List<String> screenshots){
+        this.screenshots = GsonUtils.toJsonString(screenshots);
+    }
+
 
     @Override
     public boolean isValid() {

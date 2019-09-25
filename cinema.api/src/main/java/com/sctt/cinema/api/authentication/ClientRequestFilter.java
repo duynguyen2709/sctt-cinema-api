@@ -99,10 +99,6 @@ public class ClientRequestFilter implements Filter {
     }
 
     private ReturnCodeEnum validateParam(){
-
-        if (IS_DEBUG_MODE)
-            return ReturnCodeEnum.SUCCESS;
-
         try {
             if (System.currentTimeMillis() - this.reqdate > TIME_LIMIT)
                 return ReturnCodeEnum.TIME_LIMIT_EXCEED;
@@ -128,6 +124,6 @@ public class ClientRequestFilter implements Filter {
 
     @Override
     public void destroy() {
-        REQUEST_VALIDATION_MAP=null;
+        REQUEST_VALIDATION_MAP = null;
     }
 }
