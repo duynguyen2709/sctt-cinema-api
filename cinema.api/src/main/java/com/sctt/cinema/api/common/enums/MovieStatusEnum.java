@@ -21,7 +21,7 @@ public enum MovieStatusEnum {
         return this.value;
     }
 
-    public static MovieStatusEnum fromtInt(int iValue) {
+    public static MovieStatusEnum fromInt(int iValue) {
         return returnMap.get(iValue);
     }
 

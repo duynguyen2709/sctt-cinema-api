@@ -21,7 +21,7 @@ public enum TicketStatusEnum {
         return this.value;
     }
 
-    public static TicketStatusEnum fromtInt(int iValue) {
+    public static TicketStatusEnum fromInt(int iValue) {
         return returnMap.get(iValue);
     }
 

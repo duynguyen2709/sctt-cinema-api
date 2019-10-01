@@ -34,16 +34,12 @@ public class User extends BaseJPAEntity {
     public long totalAccumulation;
 
     @Column
-    public int status;
-
-    @Column
     public Timestamp creationDate;
 
     @Override
     public boolean isValid() {
         return !email.isEmpty() && !password.isEmpty() &&
                 !fullName.isEmpty() && !phoneNumber.isEmpty()
-                && (role == 0 || role == 1 || role == 2)
-                 && (status == 1 || status == 0);
+                && (role == 0 || role == 1 || role == 2);
     }
 }

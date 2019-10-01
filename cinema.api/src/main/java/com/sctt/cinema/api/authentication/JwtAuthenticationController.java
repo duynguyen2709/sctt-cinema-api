@@ -7,6 +7,7 @@ import com.sctt.cinema.api.business.entity.jpa.User;
 import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
+import com.sctt.cinema.api.common.enums.RoleEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +46,7 @@ public class JwtAuthenticationController {
 
             LoginDTO response = new LoginDTO();
 
-            String token = jwtTokenUtil.generateToken(userDetails);
+            String token = jwtTokenUtil.generateToken(userDetails.getUsername(), userService.findById(req.username).role);
             UserDTO user = new UserDTO();
             user.clone(userService.findById(req.username));
 
@@ -75,6 +76,7 @@ public class JwtAuthenticationController {
             oldReq.username = user.email;
             oldReq.password = user.password;
 
+            user.role = RoleEnum.CUSTOMER.getValue();
             User newUser = userService.create(user);
             return login(oldReq);
 

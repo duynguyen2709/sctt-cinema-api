@@ -20,7 +20,7 @@ public enum ShowtimeTypeEnum {
         return this.value;
     }
 
-    public static ShowtimeTypeEnum fromtInt(int iValue) {
+    public static ShowtimeTypeEnum fromInt(int iValue) {
         return returnMap.get(iValue);
     }
 

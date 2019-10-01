@@ -3,16 +3,17 @@ package com.sctt.cinema.api.common.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum LoginTypeEnum {
-    NORMAL(1),
-    _3RD_PARTY(2),
+public enum RoleEnum {
+    ADMIN(0),
+    STAFF(1),
+    CUSTOMER(2),
     ;
 
     private final int value;
 
-    private static final Map<Integer, LoginTypeEnum> returnMap = new HashMap<>();
+    private static final Map<Integer, RoleEnum> returnMap = new HashMap<>();
 
-    LoginTypeEnum(int value) {
+    RoleEnum(int value) {
         this.value = value;
     }
 
@@ -20,7 +21,7 @@ public enum LoginTypeEnum {
         return this.value;
     }
 
-    public static LoginTypeEnum fromInt(int iValue) {
+    public static RoleEnum fromInt(int iValue) {
         return returnMap.get(iValue);
     }
 
@@ -29,9 +30,9 @@ public enum LoginTypeEnum {
     }
 
     static {
-        LoginTypeEnum[] var0 = values();
+        RoleEnum[] var0 = values();
 
-        for (LoginTypeEnum errorCodeEnum : var0) {
+        for (RoleEnum errorCodeEnum : var0) {
             returnMap.put(errorCodeEnum.value, errorCodeEnum);
         }
 
