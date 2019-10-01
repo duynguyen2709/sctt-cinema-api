@@ -64,7 +64,7 @@ public class JwtAuthenticationController {
         return res;
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/client/public/signup")
     public BaseResponse signUp(@RequestBody User user){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
         try{
