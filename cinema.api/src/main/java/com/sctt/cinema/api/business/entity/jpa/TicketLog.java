@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -58,8 +59,9 @@ public class TicketLog extends BaseJPAEntity {
         }
     }
 
-    public void setSeatCodes(List<String> seatCodes){
-        this.seatCodes = GsonUtils.toJsonString(seatCodes);
+    public void setSeatCodes(List<Object> seatCodes){
+        List<String> list = seatCodes.stream().map(String::valueOf).collect(Collectors.toList());
+        this.seatCodes = GsonUtils.toJsonString(list);
     }
 
     public long getOrderTime(){

@@ -14,6 +14,6 @@ public class OrderDTO implements Serializable {
 
     public int showtimeID;
     public int roomID;
-    public List<String> seatCodes;
+    public List<Object> seatCodes;
     public String email;
 }

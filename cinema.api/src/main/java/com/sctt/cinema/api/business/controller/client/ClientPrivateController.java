@@ -1,13 +1,11 @@
 package com.sctt.cinema.api.business.controller.client;
 
-import com.sctt.cinema.api.business.entity.jpa.BookedSeat;
-import com.sctt.cinema.api.business.entity.jpa.Showtime;
-import com.sctt.cinema.api.business.entity.jpa.TicketLog;
-import com.sctt.cinema.api.business.entity.jpa.User;
+import com.sctt.cinema.api.business.entity.jpa.*;
 import com.sctt.cinema.api.business.entity.request.OrderDTO;
 import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
 import com.sctt.cinema.api.business.service.jpa.*;
 import com.sctt.cinema.api.common.BaseResponse;
+import com.sctt.cinema.api.common.enums.MovieFormatEnum;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import com.sctt.cinema.api.common.enums.TicketStatusEnum;
 import com.sctt.cinema.api.util.BuzUtils;
@@ -29,6 +27,12 @@ public class ClientPrivateController {
     //<editor-fold defaultstate="collapsed" desc="Services">
     @Autowired
     private ShowtimeService showtimeService;
+
+    @Autowired
+    private BuzConfigService buzConfigService;
+
+    @Autowired
+    private SeatService seatService;
 
     @Autowired
     private RoomService roomService;
@@ -100,8 +104,8 @@ public class ClientPrivateController {
             }
 
             //check booked seat
-            for (String seat: entity.seatCodes){
-                String key = String.format("%s_%s_%s",entity.roomID,seat,entity.showtimeID);
+            for (Object seat: entity.seatCodes){
+                String key = String.format("%s_%s_%s",entity.roomID, String.valueOf(seat), entity.showtimeID);
                 if (bookedSeatService.findById(key) != null){
                     res = new BaseResponse(ReturnCodeEnum.SEAT_NOT_EMPTY);
                     return res;
@@ -150,20 +154,75 @@ public class ClientPrivateController {
 
         producer.sendTicketLogProcessQueue(ticket, delaySecond);
 
-        for (String s : entity.seatCodes){
-            BookedSeat seat = new BookedSeat(entity.roomID, s, entity.showtimeID);
+        for (Object s : entity.seatCodes){
+            BookedSeat seat = new BookedSeat(entity.roomID, String.valueOf(s), entity.showtimeID);
             producer.sendBookedSeatRemoveQueue(seat, delaySecondEnd);
         }
     }
 
     private long calculateTicketPrice(OrderDTO entity) {
         long res = 0;
-        int  movieID = showtimeService.findById(entity.showtimeID).movieID;
-        long basePrice = movieService.findById(movieID).baseTicketPrice;
+        Showtime showtime = showtimeService.findById(entity.showtimeID);
+        long basePrice = movieService.findById(showtime.movieID).baseTicketPrice;
 
-        for (String seat : entity.seatCodes){
-            res += basePrice;
+        String priceIncreaseByFormat = String.format("%s_%s","TicketPrice","3DMovie");
+        String priceIncreaseBySeatType = String.format("%s_%s","TicketPrice","VIPSeat");
+        String discount = String.format("%s_%s","TicketPrice","Discount");
+        String increaseType = String.format("%s_%s","TicketPrice","Type");
+
+        BuzConfig priceIncreaseByFormatConf = buzConfigService.findById(priceIncreaseByFormat);
+        BuzConfig priceIncreaseBySeatTypeConf = buzConfigService.findById(priceIncreaseBySeatType);
+        BuzConfig discountConf = buzConfigService.findById(discount);
+        BuzConfig increaseTypeConf = buzConfigService.findById(increaseType);
+
+        for (Object seat : entity.seatCodes){
+            String seatCode = String.valueOf(seat);
+            int seatType = seatService.findById(String.format("%s_%s", entity.roomID, seatCode)).seatType;
+            if (seatType == 2){
+                // VIP SEAT
+                if (priceIncreaseBySeatTypeConf != null && increaseTypeConf != null &&
+                        !priceIncreaseBySeatTypeConf.buzValue.isEmpty() && !increaseTypeConf.buzValue.isEmpty()){
+                    int value = Integer.parseInt(priceIncreaseBySeatTypeConf.buzValue);
+                    String type = increaseTypeConf.buzValue;
+
+                    if (type.equalsIgnoreCase("direct")){
+                        res += basePrice + value;
+                    } else if (type.equalsIgnoreCase("percentage")){
+                        res += basePrice * (100 + value) / 100;
+                    }
+                }
+            } else {
+                res += basePrice;
+            }
         }
+
+        // 3D format
+        if (showtime.movieFormat == MovieFormatEnum._3D.getValue()){
+            if (priceIncreaseByFormatConf != null && increaseTypeConf != null &&
+                    !priceIncreaseByFormatConf.buzValue.isEmpty() && !increaseTypeConf.buzValue.isEmpty()){
+                int value = Integer.parseInt(priceIncreaseByFormatConf.buzValue);
+                String type = increaseTypeConf.buzValue;
+
+                if (type.equalsIgnoreCase("direct")){
+                    res += entity.seatCodes.size() * value;
+                } else if (type.equalsIgnoreCase("percentage")){
+                    res *= (100 + value) / 100;
+                }
+            }
+        }
+
+        if (discountConf != null && increaseTypeConf != null &&
+                !discountConf.buzValue.isEmpty() && !increaseTypeConf.buzValue.isEmpty()){
+            int value = Integer.parseInt(discountConf.buzValue);
+            String type = increaseTypeConf.buzValue;
+
+            if (type.equalsIgnoreCase("direct")){
+                res -= entity.seatCodes.size() * value;
+            } else if (type.equalsIgnoreCase("percentage")){
+                res *= (100 - value) / 100;
+            }
+        }
+
         return res;
     }
 

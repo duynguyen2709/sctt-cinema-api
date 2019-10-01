@@ -65,8 +65,8 @@ public class BookedSeatService extends BaseJPAService<BookedSeat, String>{
     }
 
     public void batchInsert(OrderDTO order){
-        for (String s : order.seatCodes){
-            BookedSeat seat = new BookedSeat(order.roomID, s, order.showtimeID);
+        for (Object s : order.seatCodes){
+            BookedSeat seat = new BookedSeat(order.roomID, String.valueOf(s), order.showtimeID);
             this.create(seat);
         }
     }
