@@ -28,10 +28,6 @@ public class ClientRequestFilter implements Filter {
 
     private static final Long TIME_LIMIT = 60 * 1000L;
 
-    private int    clientid;
-    private long   reqdate;
-    private String sig;
-
     private static final String HASH_KEY = "SCTT";
 
     private static ConcurrentMap<Long, Long> REQUEST_VALIDATION_MAP;
@@ -49,25 +45,26 @@ public class ClientRequestFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         if (!IS_DEBUG_MODE) {
-            ReturnCodeEnum res = getParam(servletRequest);
+            ClientAuthenRequestWrapper obj = new ClientAuthenRequestWrapper();
+            ReturnCodeEnum res = getParam(servletRequest, obj);
             if (res != ReturnCodeEnum.SUCCESS) {
                 servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
                 return;
             }
 
-            res = validateParam();
+            res = validateParam(obj);
             if (res != ReturnCodeEnum.SUCCESS) {
                 servletResponse.getWriter().print(GsonUtils.toJsonString(new BaseResponse(res)));
                 return;
             }
 
-            REQUEST_VALIDATION_MAP.put(this.reqdate, this.reqdate + TIME_LIMIT);
+            REQUEST_VALIDATION_MAP.put(obj.reqdate, obj.reqdate + TIME_LIMIT);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private ReturnCodeEnum getParam(ServletRequest servletRequest) {
+    private ReturnCodeEnum getParam(ServletRequest servletRequest, ClientAuthenRequestWrapper obj) {
         try {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
 
@@ -86,9 +83,9 @@ public class ClientRequestFilter implements Filter {
                 return ReturnCodeEnum.PARAM_SIG_INVALID;
             }
 
-            this.clientid = Integer.parseInt(request.getParameter("clientid"));
-            this.reqdate = Long.parseLong(request.getParameter("reqdate"));
-            this.sig = request.getParameter("sig");
+            obj.clientid = Integer.parseInt(request.getParameter("clientid"));
+            obj.reqdate = Long.parseLong(request.getParameter("reqdate"));
+            obj.sig = request.getParameter("sig");
 
             return ReturnCodeEnum.SUCCESS;
 
@@ -98,19 +95,19 @@ public class ClientRequestFilter implements Filter {
         }
     }
 
-    private ReturnCodeEnum validateParam(){
+    private ReturnCodeEnum validateParam(ClientAuthenRequestWrapper obj){
         try {
-            if (System.currentTimeMillis() - this.reqdate > TIME_LIMIT)
+            if (System.currentTimeMillis() - obj.reqdate > TIME_LIMIT)
                 return ReturnCodeEnum.TIME_LIMIT_EXCEED;
 
-            if (REQUEST_VALIDATION_MAP.containsKey(this.reqdate))
+            if (REQUEST_VALIDATION_MAP.containsKey(obj.reqdate))
                 return ReturnCodeEnum.REPLAY_ATTACK_BLOCKED;
 
-            String dataSig   = String.format("%s|%s|%s", this.clientid, this.reqdate, HASH_KEY);
+            String dataSig   = String.format("%s|%s|%s", obj.clientid, obj.reqdate, HASH_KEY);
             String serverSig = HashUtils.hashSHA256(dataSig);
 
-            if (!serverSig.equalsIgnoreCase(this.sig)) {
-                log.error(String.format("clientSig [%s] != serverSig [%s]", sig, serverSig));
+            if (!serverSig.equalsIgnoreCase(obj.sig)) {
+                log.error(String.format("clientSig [%s] != serverSig [%s]", obj.sig, serverSig));
                 return ReturnCodeEnum.CHECK_SIG_NOT_MATCH;
             }
 
@@ -125,5 +122,11 @@ public class ClientRequestFilter implements Filter {
     @Override
     public void destroy() {
         REQUEST_VALIDATION_MAP = null;
+    }
+
+    private class ClientAuthenRequestWrapper{
+        public int    clientid;
+        public long   reqdate;
+        public String sig;
     }
 }

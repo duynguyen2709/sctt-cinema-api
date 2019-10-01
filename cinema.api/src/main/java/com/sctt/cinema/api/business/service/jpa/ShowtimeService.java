@@ -42,6 +42,7 @@ public class ShowtimeService extends BaseJPAService<Showtime,Integer>{
     public Showtime create(Showtime entity) {
         Movie movie = movieService.findById(entity.movieID);
         entity.setTimeTo(entity.timeFrom.getTime() + movie.timeInMinute * 60 * 1000);
+        entity.status = 1;
 
         Showtime t = repo.save(entity);
 
