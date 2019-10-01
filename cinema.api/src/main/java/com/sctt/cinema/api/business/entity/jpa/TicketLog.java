@@ -52,7 +52,6 @@ public class TicketLog extends BaseJPAEntity {
         try {
             ObjectMapper mapper = new ObjectMapper();
             TypeReference<List<String>> typeRef = new TypeReference<List<String>>() {};
-
             return mapper.readValue(seatCodes, typeRef);
         }catch (Exception e){
             return null;

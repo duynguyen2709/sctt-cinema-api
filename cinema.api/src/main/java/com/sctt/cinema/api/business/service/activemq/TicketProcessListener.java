@@ -55,7 +55,7 @@ public class TicketProcessListener {
                 aResult.returnCode = ReturnCodeEnum.SUCCESS.getValue();
             }
         } catch (Exception e) {
-            log.error("consume logEnt ex", e);
+            log.error("consume logEnt ex {}", e.getMessage());
             aResult.stepResult = "failed";
             aResult.returnCode = ReturnCodeEnum.EXCEPTION.getValue();
             aResult.exception = e.getMessage();

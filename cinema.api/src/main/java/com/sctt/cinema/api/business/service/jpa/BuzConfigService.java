@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class BuzConfigService extends BaseJPAService<BuzConfig,Integer>{
+public class BuzConfigService extends BaseJPAService<BuzConfig, String>{
 
     @Autowired
     private BuzConfigRepository repo;
@@ -38,7 +38,7 @@ public class BuzConfigService extends BaseJPAService<BuzConfig,Integer>{
     public BuzConfig create(BuzConfig entity) {
         BuzConfig t = repo.save(entity);
 
-        cacheMap.put(t.buzID,t);
+        cacheMap.put(t.getKey(),t);
 
         return t;
     }
@@ -47,21 +47,21 @@ public class BuzConfigService extends BaseJPAService<BuzConfig,Integer>{
     public BuzConfig update(BuzConfig entity) {
         BuzConfig t = repo.save(entity);
 
-        cacheMap.replace(t.buzID,t);
+        cacheMap.replace(t.getKey(),t);
 
         return t;
     }
 
     @Override
-    public BuzConfig findById(Integer key) {
+    public BuzConfig findById(String key) {
         BuzConfig t = cacheMap.get(key);
 
         return t;
     }
 
     @Override
-    public void delete(Integer key) {
-        repo.deleteById(key);
+    public void delete(String key) {
+        repo.deleteById(new BuzConfig.BuzConfigKey(key));
         cacheMap.remove(key);
     }
 }

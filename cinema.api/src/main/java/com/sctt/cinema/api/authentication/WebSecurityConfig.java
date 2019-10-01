@@ -57,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 
         List<String> antPatterns = new ArrayList<>();
-        antPatterns.add("/authenticate");
+        antPatterns.add("/login");
+        antPatterns.add("/signup");
         antPatterns.add("/client/public/**");
         if (IS_DEBUG_MODE)
             antPatterns.add("/client/private/**");

@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class OrderEntity implements Serializable {
+public class OrderDTO implements Serializable {
 
     public int showtimeID;
     public int roomID;

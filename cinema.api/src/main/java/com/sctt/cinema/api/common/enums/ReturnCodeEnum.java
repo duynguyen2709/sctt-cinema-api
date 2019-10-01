@@ -32,6 +32,11 @@ public enum ReturnCodeEnum {
     SEAT_NOT_FOUND(-18),
 
     SEAT_NOT_EMPTY(-19),
+    DATA_NOT_VALID(-20),
+
+    PARAM_TYPE_INVALID(-21),
+    PARAM_ID_INVALID(-22),
+    PARAM_DATE_INVALID(-23),
     ;
 
 

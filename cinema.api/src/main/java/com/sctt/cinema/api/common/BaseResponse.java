@@ -22,12 +22,12 @@ public class BaseResponse implements Serializable {
         this.returnCode = code.getValue();
         this.returnMessage = code.toString();
     }
-
-    public static BaseResponse setResponse(ReturnCodeEnum code,Object data){
-        BaseResponse res = new BaseResponse(code);
-        res.data = data;
-        return res;
-    }
+//
+//    public static BaseResponse setResponse(ReturnCodeEnum code, Object data){
+//        BaseResponse res = new BaseResponse(code);
+//        res.data = data;
+//        return res;
+//    }
 
     public void setCode(int i) {
         this.returnCode = i;

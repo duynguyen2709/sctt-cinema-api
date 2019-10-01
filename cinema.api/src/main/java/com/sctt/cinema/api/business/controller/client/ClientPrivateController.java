@@ -4,7 +4,7 @@ import com.sctt.cinema.api.business.entity.jpa.BookedSeat;
 import com.sctt.cinema.api.business.entity.jpa.Showtime;
 import com.sctt.cinema.api.business.entity.jpa.TicketLog;
 import com.sctt.cinema.api.business.entity.jpa.User;
-import com.sctt.cinema.api.business.entity.request.OrderEntity;
+import com.sctt.cinema.api.business.entity.request.OrderDTO;
 import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
 import com.sctt.cinema.api.business.service.jpa.*;
 import com.sctt.cinema.api.common.BaseResponse;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import static com.sctt.cinema.api.business.service.jpa.TicketLogService.CURRENT_TICKET_ID;
 
@@ -80,7 +79,7 @@ public class ClientPrivateController {
     }
 
     @PostMapping("/createorder")
-    public BaseResponse createOrder(@RequestBody OrderEntity entity){
+    public BaseResponse createOrder(@RequestBody OrderDTO entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -119,7 +118,7 @@ public class ClientPrivateController {
         return res;
     }
 
-    private MiniTicketDTO createTicket(OrderEntity entity) throws Exception {
+    private MiniTicketDTO createTicket(OrderDTO entity) throws Exception {
         TicketLog ticket = new TicketLog();
         ticket.email = entity.email;
         ticket.setSeatCodes(entity.seatCodes);
@@ -139,7 +138,7 @@ public class ClientPrivateController {
         return new MiniTicketDTO(ticket.ticketID);
     }
 
-    private void sendTicketProcessQueue(OrderEntity entity, TicketLog ticket) throws Exception {
+    private void sendTicketProcessQueue(OrderDTO entity, TicketLog ticket) throws Exception {
         Showtime showtime = showtimeService.findById(entity.showtimeID);
         long timeStart = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
         long delaySecond = (timeStart - System.currentTimeMillis()) / 1000;
@@ -157,7 +156,7 @@ public class ClientPrivateController {
         }
     }
 
-    private long calculateTicketPrice(OrderEntity entity) {
+    private long calculateTicketPrice(OrderDTO entity) {
         long res = 0;
         int  movieID = showtimeService.findById(entity.showtimeID).movieID;
         long basePrice = movieService.findById(movieID).baseTicketPrice;

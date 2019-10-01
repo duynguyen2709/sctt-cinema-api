@@ -1,4 +1,4 @@
-package com.sctt.cinema.api.business.entity.DTO;
+package com.sctt.cinema.api.business.entity.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

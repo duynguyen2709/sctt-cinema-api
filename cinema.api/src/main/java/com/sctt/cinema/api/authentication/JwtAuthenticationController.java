@@ -1,8 +1,9 @@
 package com.sctt.cinema.api.authentication;
 
 
-import com.sctt.cinema.api.business.entity.DTO.LoginDTO;
-import com.sctt.cinema.api.business.entity.DTO.UserDTO;
+import com.sctt.cinema.api.business.entity.response.LoginDTO;
+import com.sctt.cinema.api.business.entity.response.UserDTO;
+import com.sctt.cinema.api.business.entity.jpa.User;
 import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
@@ -34,8 +35,9 @@ public class JwtAuthenticationController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/authenticate")
-    public BaseResponse createAuthenticationToken(@RequestBody JwtRequest req) {
+    @PostMapping("/login")
+    public BaseResponse login(@RequestBody JwtRequest req) {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
@@ -50,13 +52,34 @@ public class JwtAuthenticationController {
             response.token = token;
             response.user = user;
 
-            return BaseResponse.setResponse(ReturnCodeEnum.SUCCESS, response);
+            res.data = response;
 
         } catch (BadCredentialsException e){
             return new BaseResponse(ReturnCodeEnum.WRONG_USERNAME_OR_PASSWORD);
 
         } catch (Exception e){
-            log.error(e);
+            log.error("[login] ex {}", e.getMessage());
+            return new BaseResponse(ReturnCodeEnum.EXCEPTION);
+        }
+        return res;
+    }
+
+    @PostMapping("/signup")
+    public BaseResponse signUp(@RequestBody User user){
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+        try{
+            if (!user.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
+            JwtRequest oldReq = new JwtRequest();
+            oldReq.username = user.email;
+            oldReq.password = user.password;
+
+            User newUser = userService.create(user);
+            return login(oldReq);
+
+        } catch (Exception e){
+            log.error("[signup] ex {}", e.getMessage());
             return new BaseResponse(ReturnCodeEnum.EXCEPTION);
         }
     }

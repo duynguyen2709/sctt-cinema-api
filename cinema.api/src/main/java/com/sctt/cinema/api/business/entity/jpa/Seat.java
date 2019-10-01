@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.entity.jpa;
 
+import com.sctt.cinema.api.business.entity.response.SeatStatusDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,15 @@ public class Seat extends BaseJPAEntity {
 
     @Column
     public int columnNo;
+
+    public SeatStatusDTO convert(){
+        SeatStatusDTO dto = new SeatStatusDTO();
+        dto.seatCode = this.seatCode;
+        dto.seatType = this.seatType;
+        dto.status = 0;
+
+        return dto;
+    }
 
     public String getKey(){
         return this.roomID + "_" + this.seatCode;

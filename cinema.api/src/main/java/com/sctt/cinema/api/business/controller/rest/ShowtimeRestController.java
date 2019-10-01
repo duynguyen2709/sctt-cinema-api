@@ -52,6 +52,9 @@ public class ShowtimeRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
@@ -62,14 +65,17 @@ public class ShowtimeRestController {
     }
 
     @PutMapping("/showtimes/{showtimeID}")
-    public BaseResponse insert(@PathVariable Integer showtimeID,@RequestBody Showtime entity){
+    public BaseResponse update(@PathVariable Integer showtimeID,@RequestBody Showtime entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
             entity.showtimeID = showtimeID;
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.update(entity);
         } catch (Exception e){
-            log.error("[insert] ex: {}",e.getMessage());
+            log.error("[update] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 

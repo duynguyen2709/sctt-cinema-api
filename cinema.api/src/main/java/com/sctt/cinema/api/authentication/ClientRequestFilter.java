@@ -93,7 +93,7 @@ public class ClientRequestFilter implements Filter {
             return ReturnCodeEnum.SUCCESS;
 
         } catch (Exception e){
-            log.error("[getParam] ex",e);
+            log.error("[getParam] ex {}",e.getMessage());
             return ReturnCodeEnum.EXCEPTION;
         }
     }
@@ -117,7 +117,7 @@ public class ClientRequestFilter implements Filter {
             return ReturnCodeEnum.SUCCESS;
 
         } catch (Exception e){
-            log.error("[validateParam] ex",e);
+            log.error("[validateParam] ex {}",e.getMessage());
             return ReturnCodeEnum.EXCEPTION;
         }
     }

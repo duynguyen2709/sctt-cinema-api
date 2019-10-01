@@ -12,6 +12,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.event.EventListener;
 
+import javax.annotation.PreDestroy;
+
 @SpringBootApplication
 @Log4j2
 @ServletComponentScan
@@ -40,8 +42,13 @@ public class Application {
 			log.info("=============== Application Init Done ===============");
 
 		} catch (Exception e){
-			log.error("Application Init Failed: " + e.getMessage(),e);
+			log.error("Application Init Failed: " + e.getMessage());
 			System.exit(0);
 		}
+	}
+
+	@PreDestroy
+	public void onExit() {
+		log.info("############ Application Stopped ###############");
 	}
 }

@@ -26,7 +26,7 @@ public class GsonUtils {
         try {
             return gson.fromJson(sJson, t);
         } catch (Exception var3) {
-            log.error(String.format("[fromJsonStringDefaultNull] parse %s to %s ex ", sJson, t.getName()), var3);
+            log.error(String.format("[fromJsonStringDefaultNull] parse %s to %s ex \n{%s}", sJson, t.getName(), var3.getMessage()));
             return null;
         }
     }

@@ -11,6 +11,8 @@ public enum CacheKeyEnum {
     MOVIE,
     USER,
     BOOKED_SEAT,
+
+    ROOM_SEAT,
     ALL;
 
     public static CacheKeyEnum getKey(String type){

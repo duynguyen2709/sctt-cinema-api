@@ -51,6 +51,10 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            if (!theater.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
+
             res.data = service.create(theater);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
@@ -66,6 +70,10 @@ public class TheaterRestController {
 
         try{
             theater.theaterID = theaterID;
+
+            if (!theater.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.update(theater);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());

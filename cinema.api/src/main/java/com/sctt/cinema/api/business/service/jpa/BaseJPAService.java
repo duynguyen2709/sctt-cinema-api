@@ -1,6 +1,5 @@
 package com.sctt.cinema.api.business.service.jpa;
 
-import com.sctt.cinema.api.business.entity.request.OrderEntity;
 import com.sctt.cinema.api.business.service.CacheService;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,7 @@ public abstract class BaseJPAService<T,K>  {
     private CacheService cacheService;
 
     protected void loadCacheMap(CacheKeyEnum type){
-        if (cacheMap == null)
-            cacheMap = cacheService.loadCacheMap(type);
+        cacheMap = cacheService.loadCacheMap(type);
     }
 
     protected abstract void init();

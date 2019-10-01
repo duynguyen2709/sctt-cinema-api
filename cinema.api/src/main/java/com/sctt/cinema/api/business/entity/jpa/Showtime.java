@@ -26,6 +26,9 @@ public class Showtime extends BaseJPAEntity {
     public int movieFormat;
 
     @Column
+    public int theaterID;
+
+    @Column
     public int roomID;
 
     @Column

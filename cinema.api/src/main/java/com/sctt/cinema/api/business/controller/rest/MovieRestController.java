@@ -52,6 +52,9 @@ public class MovieRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
@@ -67,6 +70,9 @@ public class MovieRestController {
 
         try{
             entity.movieID = movieID;
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.update(entity);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());

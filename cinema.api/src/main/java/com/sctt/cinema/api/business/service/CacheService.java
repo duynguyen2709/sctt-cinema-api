@@ -3,7 +3,9 @@ package com.sctt.cinema.api.business.service;
 import com.hazelcast.transaction.TransactionContext;
 import com.sctt.cinema.api.business.entity.CacheMaps;
 import com.sctt.cinema.api.business.entity.jpa.*;
+import com.sctt.cinema.api.business.entity.request.RoomSeatMappingDTO;
 import com.sctt.cinema.api.business.repository.*;
+import com.sctt.cinema.api.util.GsonUtils;
 import com.sctt.cinema.api.util.HazelCastUtils;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import lombok.extern.log4j.Log4j2;
@@ -11,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -82,6 +84,9 @@ public class CacheService {
 
             case BOOKED_SEAT:
                 return loadBookedSeatMap();
+
+            case ROOM_SEAT:
+                return loadRoomSeatMap();
 
             case ALL:
             default:
@@ -165,9 +170,9 @@ public class CacheService {
             CacheMaps.BUZ_CONFIG_MAP = null;
         }
 
-        Map<Integer, BuzConfig> map = new HashMap<>();
+        Map<String, BuzConfig> map = new HashMap<>();
 
-        buzConfigRepository.findAll().forEach(c -> map.put(c.buzID,c));
+        buzConfigRepository.findAll().forEach(c -> map.put(c.getKey(),c));
 
         CacheMaps.BUZ_CONFIG_MAP = reload(map, CacheKeyEnum.BUZ_CONFIG);
         log.info("BUZ_CONFIG_MAP loaded succeed");
@@ -253,5 +258,42 @@ public class CacheService {
         log.info("THEATER_MAP loaded succeed");
 
         return CacheMaps.THEATER_MAP;
+    }
+
+    private Map loadRoomSeatMap() {
+        if (CacheMaps.ROOM_SEAT_MAP != null){
+            CacheMaps.ROOM_SEAT_MAP.clear();
+            CacheMaps.ROOM_SEAT_MAP = null;
+        }
+
+        Map<Integer, RoomSeatMappingDTO> map = new HashMap<>();
+
+        //load
+        List<Seat> seats = seatRepository.findAll();
+
+        for (Seat s : seats) {
+            if (!map.containsKey(s.roomID))
+                map.put(s.roomID, new RoomSeatMappingDTO(s.roomID));
+
+            RoomSeatMappingDTO dto = map.get(s.roomID);
+            if (dto.numOfRow < s.rowNo)
+                dto.numOfRow = s.rowNo;
+
+            if (dto.numOfColumn < s.columnNo)
+                dto.numOfColumn = s.columnNo;
+        }
+
+        for (Seat s : seats) {
+            RoomSeatMappingDTO dto = map.get(s.roomID);
+            if (dto.seats == null)
+                dto.seats = new Seat[dto.numOfRow + 1][dto.numOfColumn + 1];
+
+            dto.seats[s.rowNo][s.columnNo] = s;
+        }
+
+        CacheMaps.ROOM_SEAT_MAP = reload(map,CacheKeyEnum.ROOM_SEAT);
+        log.info("ROOM_SEAT_MAP loaded succeed");
+
+        return CacheMaps.ROOM_SEAT_MAP;
     }
 }

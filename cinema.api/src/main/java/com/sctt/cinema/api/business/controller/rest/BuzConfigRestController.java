@@ -16,7 +16,8 @@ public class BuzConfigRestController {
     @Autowired
     private BuzConfigService service;
 
-    @GetMapping("/buzconfigs") public BaseResponse findAll(){
+    @GetMapping("/buzconfigs")
+    public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
@@ -29,12 +30,12 @@ public class BuzConfigRestController {
         return res;
     }
 
-    @GetMapping("/buzconfigs/{buzID}")
-    public BaseResponse findByID(@PathVariable Integer buzID){
+    @GetMapping("/buzconfigs/{section}/{buzKey}")
+    public BaseResponse findByID(@PathVariable String section, @PathVariable String buzKey){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findById(buzID);
+            res.data = service.findById(String.format("%s_%s", section, buzKey));
             if (res.data == null)
                 res = new BaseResponse(ReturnCodeEnum.BUZ_CONFIG_NOT_FOUND);
         } catch (Exception e){
@@ -50,6 +51,9 @@ public class BuzConfigRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
@@ -59,12 +63,16 @@ public class BuzConfigRestController {
         return res;
     }
 
-    @PutMapping("/buzconfigs/{buzID}")
-    public BaseResponse update(@PathVariable Integer buzID,@RequestBody BuzConfig entity){
+    @PutMapping("/buzconfigs/{section}/{buzKey}")
+    public BaseResponse update(@PathVariable String section, @PathVariable String buzKey, @RequestBody BuzConfig entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            entity.buzID = buzID;
+            entity.section = section;
+            entity.buzKey = buzKey;
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
             res.data = service.update(entity);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());
@@ -74,12 +82,12 @@ public class BuzConfigRestController {
         return res;
     }
 
-    @DeleteMapping("/buzconfigs/{buzID}")
-    public BaseResponse delete(@PathVariable Integer buzID){
+    @DeleteMapping("/buzconfigs/{section}/{buzKey}")
+    public BaseResponse delete(@PathVariable String section, @PathVariable String buzKey){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            service.delete(buzID);
+            service.delete(String.format("%s_%s", section, buzKey));
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());

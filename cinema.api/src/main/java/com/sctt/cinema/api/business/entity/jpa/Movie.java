@@ -58,9 +58,8 @@ public class Movie extends BaseJPAEntity {
 
     public List<String> getScreenshots(){
         try {
-            ObjectMapper                mapper  = new ObjectMapper();
+            ObjectMapper mapper  = new ObjectMapper();
             TypeReference<List<String>> typeRef = new TypeReference<List<String>>() {};
-
             return mapper.readValue(screenshots, typeRef);
         }catch (Exception e){
             return null;

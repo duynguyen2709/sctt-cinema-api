@@ -56,7 +56,7 @@ public class RequestLoggingServlet extends DispatcherServlet {
 
             log.info(GsonUtils.toJsonString(logEnt));
         } catch (Exception e) {
-            log.error("log ex", e);
+            log.error("log ex {}", e.getMessage());
         }
     }
 

@@ -3,6 +3,7 @@ package com.sctt.cinema.api.business.service.jpa;
 import com.sctt.cinema.api.business.entity.jpa.Movie;
 import com.sctt.cinema.api.business.repository.MovieRepository;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
+import com.sctt.cinema.api.common.enums.MovieStatusEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService extends BaseJPAService<Movie,Integer>{
@@ -62,5 +64,11 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
     public void delete(Integer key) {
         repo.deleteById(key);
         cacheMap.remove(key);
+    }
+
+    public List<Movie> findByStatus(MovieStatusEnum status){
+        return findAll().stream()
+                .filter(c -> c.status == status.getValue())
+                .collect(Collectors.toList());
     }
 }

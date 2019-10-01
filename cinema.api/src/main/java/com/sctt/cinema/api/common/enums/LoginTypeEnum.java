@@ -3,17 +3,16 @@ package com.sctt.cinema.api.common.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TicketStatusEnum {
-    SUCCESS(1),
-    PAYING(2),
-    CANCELLED(0),
+public enum LoginTypeEnum {
+    NORMAL(1),
+    _3RD_PARTY(2),
     ;
 
     private final int value;
 
-    private static final Map<Integer, TicketStatusEnum> returnMap = new HashMap<>();
+    private static final Map<Integer, LoginTypeEnum> returnMap = new HashMap<>();
 
-    TicketStatusEnum(int value) {
+    LoginTypeEnum(int value) {
         this.value = value;
     }
 
@@ -21,7 +20,7 @@ public enum TicketStatusEnum {
         return this.value;
     }
 
-    public static TicketStatusEnum fromtInt(int iValue) {
+    public static LoginTypeEnum fromtInt(int iValue) {
         return returnMap.get(iValue);
     }
 
@@ -30,9 +29,9 @@ public enum TicketStatusEnum {
     }
 
     static {
-        TicketStatusEnum[] var0 = values();
+        LoginTypeEnum[] var0 = values();
 
-        for (TicketStatusEnum errorCodeEnum : var0) {
+        for (LoginTypeEnum errorCodeEnum : var0) {
             returnMap.put(errorCodeEnum.value, errorCodeEnum);
         }
 

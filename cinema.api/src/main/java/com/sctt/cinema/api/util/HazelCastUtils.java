@@ -26,10 +26,6 @@ public class HazelCastUtils {
         return INSTANCE;
     }
 
-    public HazelcastInstance getHazelCastInstance() {
-        return this.hazelCastInstance;
-    }
-
     public void initHazelCastConfig(HazelCastConfig conf) {
         Config hazelCastConf = new Config();
         hazelCastConf.getNetworkConfig().setPort(conf.networkPort).setPortAutoIncrement(conf.isPortAutoIncrement);
@@ -60,22 +56,10 @@ public class HazelCastUtils {
         return context;
     }
 
-    public void beginTransaction(TransactionContext context) {
-        context.beginTransaction();
-    }
-
     public <K, V> void reloadMap(TransactionContext context, String key, Map<K, V> valMap) {
         TransactionalMap<K, V> transMap = context.getMap(key);
         transMap.keySet().forEach(transMap::remove);
         valMap.forEach(transMap::put);
-    }
-
-    public void commitTransaction(TransactionContext context) {
-        context.commitTransaction();
-    }
-
-    public void rollbackTransaction(TransactionContext context) {
-        context.rollbackTransaction();
     }
 }
 

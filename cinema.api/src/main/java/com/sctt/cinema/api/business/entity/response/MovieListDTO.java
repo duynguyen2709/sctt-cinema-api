@@ -1,4 +1,4 @@
-package com.sctt.cinema.api.business.entity.DTO;
+package com.sctt.cinema.api.business.entity.response;
 
 import com.sctt.cinema.api.business.entity.jpa.Movie;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
