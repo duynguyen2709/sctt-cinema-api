@@ -43,7 +43,7 @@ public class TicketProcessListener {
                 logEnt.status = TicketStatusEnum.CANCELLED.getValue();
                 ticketLogService.update(logEnt);
 
-                aResult.step = "bookedSeatService.delete(seat.getKey())";
+                aResult.step = "bookedSeatService.delete(seat.getBuzKey())";
                 Showtime showtime = showtimeService.findById(logEnt.showtimeID);
                 for (String s: logEnt.getSeatCodes()){
                     BookedSeat seat = new BookedSeat(showtime.roomID, s, logEnt.showtimeID);

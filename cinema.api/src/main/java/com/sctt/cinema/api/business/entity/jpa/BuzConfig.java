@@ -12,6 +12,7 @@ import java.util.Objects;
 @Data
 @Entity
 @Table(name="BuzConfig")
+@IdClass(BuzConfig.BuzConfigKey.class)
 @AllArgsConstructor
 @NoArgsConstructor
 public class BuzConfig extends BaseJPAEntity {
@@ -42,11 +43,11 @@ public class BuzConfig extends BaseJPAEntity {
     @RequiredArgsConstructor
     public static class BuzConfigKey implements Serializable{
         public String section;
-        public String key;
+        public String buzKey;
 
         public BuzConfigKey(String _key){
             this.section = _key.split("_")[0];
-            this.key = _key.split("_")[1];
+            this.buzKey = _key.split("_")[1];
         }
 
         @Override
@@ -55,12 +56,12 @@ public class BuzConfig extends BaseJPAEntity {
             if (!(o instanceof BuzConfigKey)) return false;
             BuzConfigKey that = (BuzConfigKey) o;
             return section.equalsIgnoreCase(that.section) &&
-                    key.equalsIgnoreCase(that.key);
+                    buzKey.equalsIgnoreCase(that.buzKey);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(section, key);
+            return Objects.hash(section, buzKey);
         }
     }
 }
