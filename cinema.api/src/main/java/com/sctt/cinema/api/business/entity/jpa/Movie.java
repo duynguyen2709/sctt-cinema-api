@@ -2,6 +2,7 @@ package com.sctt.cinema.api.business.entity.jpa;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sctt.cinema.api.util.DateTimeUtils;
 import com.sctt.cinema.api.util.GsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,9 +49,6 @@ public class Movie extends BaseJPAEntity {
     public Date dateFrom;
 
     @Column
-    public Date dateTo;
-
-    @Column
     public int status;
 
     @Column
@@ -73,8 +71,9 @@ public class Movie extends BaseJPAEntity {
 
     @Override
     public boolean isValid() {
+
         return !movieName.isEmpty() && !imageURL.isEmpty() && !trailerURL.isEmpty()
-                && dateFrom != null && dateTo != null && baseTicketPrice > 0
+                && dateFrom != null && baseTicketPrice > 0
                 && (status == 0 || status == 1 || status == 2);
     }
 }

@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.util;
 
+import com.sctt.cinema.api.common.enums.MovieStatusEnum;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.Timestamp;
@@ -41,5 +42,17 @@ public class DateTimeUtils {
     public static String parseTimestampToString(long timestamp, String format){
         String timeStamp = new SimpleDateFormat(format).format(new Timestamp(timestamp));
         return timeStamp;
+    }
+
+    public static int compareDateToNow(java.sql.Date date){
+        java.util.Date today = new java.util.Date();
+        java.util.Date compareDate = new java.util.Date(date.getTime());
+
+        // error
+        // today if after selected date
+        if (today.after(compareDate) || today.equals(compareDate))
+            return MovieStatusEnum.CURRENT_SHOWING.getValue();
+
+        return MovieStatusEnum.COMING_SOON.getValue();
     }
 }

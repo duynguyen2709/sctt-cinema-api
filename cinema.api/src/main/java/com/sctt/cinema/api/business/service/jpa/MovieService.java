@@ -4,6 +4,7 @@ import com.sctt.cinema.api.business.entity.jpa.Movie;
 import com.sctt.cinema.api.business.repository.MovieRepository;
 import com.sctt.cinema.api.common.enums.CacheKeyEnum;
 import com.sctt.cinema.api.common.enums.MovieStatusEnum;
+import com.sctt.cinema.api.util.DateTimeUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -37,6 +38,9 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
 
     @Override
     public Movie create(Movie entity) {
+        if (entity.status != 0)
+            entity.status = DateTimeUtils.compareDateToNow(entity.dateFrom);
+
         Movie t = repo.save(entity);
 
         cacheMap.put(t.movieID,t);
@@ -46,6 +50,9 @@ public class MovieService extends BaseJPAService<Movie,Integer>{
 
     @Override
     public Movie update(Movie entity) {
+        if (entity.status != 0)
+            entity.status = DateTimeUtils.compareDateToNow(entity.dateFrom);
+
         Movie t = repo.save(entity);
 
         cacheMap.replace(t.movieID,t);
