@@ -2,6 +2,7 @@ package com.sctt.cinema.api.business.controller.client;
 
 import com.sctt.cinema.api.business.entity.jpa.*;
 import com.sctt.cinema.api.business.entity.request.OrderDTO;
+import com.sctt.cinema.api.business.entity.response.TicketDTO;
 import com.sctt.cinema.api.business.service.BuzService;
 import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
 import com.sctt.cinema.api.business.service.jpa.*;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +67,7 @@ public class ClientPrivateController {
             user.totalAccumulation += ticket.totalPrice;
             userService.update(user);
 
-            res.data = true;
+            //res.data = true;
         } catch (Exception e){
             log.error("[payOrder] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -128,7 +130,11 @@ public class ClientPrivateController {
                     .filter(t -> t.email.equalsIgnoreCase(email))
                     .collect(Collectors.toList());
 
-            res.data = listTicket;
+            List<TicketDTO> listDTO = new ArrayList<>();
+            for (TicketLog t : listTicket)
+                listDTO.add(buzService.convertToDTO(t));
+
+            res.data = listDTO;
         } catch (Exception e){
             log.error("[getHistory] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

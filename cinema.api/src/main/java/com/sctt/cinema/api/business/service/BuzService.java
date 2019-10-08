@@ -2,18 +2,15 @@ package com.sctt.cinema.api.business.service;
 
 import com.sctt.cinema.api.business.entity.jpa.*;
 import com.sctt.cinema.api.business.entity.request.OrderDTO;
+import com.sctt.cinema.api.business.entity.response.TicketDTO;
 import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
 import com.sctt.cinema.api.business.service.jpa.*;
 import com.sctt.cinema.api.common.enums.MovieFormatEnum;
 import com.sctt.cinema.api.common.enums.TicketStatusEnum;
 import com.sctt.cinema.api.util.DateTimeUtils;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.Serializable;
 
 import static com.sctt.cinema.api.business.service.jpa.TicketLogService.CURRENT_TICKET_ID;
 
@@ -44,11 +41,17 @@ public class BuzService {
     private UserService userService;
 
     @Autowired
+    private RoomService roomService;
+
+    @Autowired
+    private TheaterService theaterService;
+
+    @Autowired
     private ActiveMQProducer producer;
     //</editor-fold>
 
     private long calculateTicketPrice(OrderDTO entity) {
-        long     res      = 0;
+        long res = 0;
         Showtime showtime = showtimeService.findById(entity.showtimeID);
 
         res = calcBySeatType(res, entity);
@@ -114,8 +117,10 @@ public class BuzService {
             int    seatType = seatService.findById(String.format("%s_%s", entity.roomID, seatCode)).seatType;
             if (seatType == 2) {
                 // VIP SEAT
-                if (priceIncreaseBySeatTypeConf != null && increaseTypeConf != null &&
-                        !priceIncreaseBySeatTypeConf.buzValue.isEmpty() && !increaseTypeConf.buzValue.isEmpty())
+                if (priceIncreaseBySeatTypeConf != null
+                        && increaseTypeConf != null
+                        && !priceIncreaseBySeatTypeConf.buzValue.isEmpty()
+                        && !increaseTypeConf.buzValue.isEmpty())
                 {
                     int    value = Integer.parseInt(priceIncreaseBySeatTypeConf.buzValue);
                     String type  = increaseTypeConf.buzValue;
@@ -127,8 +132,7 @@ public class BuzService {
                         res += basePrice * (100 + value) / 100;
                     }
                 }
-            }
-            else {
+            } else {
                 res += basePrice;
             }
         }
@@ -142,8 +146,10 @@ public class BuzService {
         BuzConfig discountConf     = buzConfigService.findById(discount);
         BuzConfig increaseTypeConf = buzConfigService.findById(increaseType);
 
-        if (discountConf != null && increaseTypeConf != null && !discountConf.buzValue.isEmpty() &&
-                !increaseTypeConf.buzValue.isEmpty())
+        if (discountConf != null
+                && increaseTypeConf != null
+                && !discountConf.buzValue.isEmpty()
+                && !increaseTypeConf.buzValue.isEmpty())
         {
             int    value = Integer.parseInt(discountConf.buzValue);
             String type  = increaseTypeConf.buzValue;
@@ -166,8 +172,10 @@ public class BuzService {
         BuzConfig priceIncreaseByFormatConf = buzConfigService.findById(priceIncreaseByFormat);
         BuzConfig increaseTypeConf          = buzConfigService.findById(increaseType);
 
-        if (priceIncreaseByFormatConf != null && increaseTypeConf != null &&
-                !priceIncreaseByFormatConf.buzValue.isEmpty() && !increaseTypeConf.buzValue.isEmpty())
+        if (priceIncreaseByFormatConf != null
+                && increaseTypeConf != null
+                && !priceIncreaseByFormatConf.buzValue.isEmpty()
+                && !increaseTypeConf.buzValue.isEmpty())
         {
             int    value = Integer.parseInt(priceIncreaseByFormatConf.buzValue);
             String type  = increaseTypeConf.buzValue;
@@ -187,7 +195,6 @@ public class BuzService {
         // id format: YYMMDDxxxx
         // YYMMDD: current date
         // xxxx auto increase
-        long   id        = 0;
         String oldYYMMDD = "";
 
         if (currentID != 0) {
@@ -195,18 +202,10 @@ public class BuzService {
         }
 
         String now = DateTimeUtils.getCurrentYYMMDD();
-
-        if (!oldYYMMDD.equalsIgnoreCase(now)) {
-            id = Long.parseLong(now + "0001");
-        }
-        else {
-            id = currentID + 1;
-        }
-
-        return id;
+        return (oldYYMMDD.equalsIgnoreCase(now)) ? (currentID + 1) : Long.parseLong(now + "0001");
     }
 
-    public MiniTicketDTO createTicket(OrderDTO entity) throws Exception {
+    public TicketDTO createTicket(OrderDTO entity) throws Exception {
         TicketLog ticket = new TicketLog();
         ticket.email = entity.email;
         ticket.setSeatCodes(entity.seatCodes);
@@ -221,19 +220,24 @@ public class BuzService {
 
         bookedSeatService.batchInsert(entity);
 
-        sendTicketProcessQueue(entity, ticket);
+        sendTicketProcessingQueue(entity, ticket);
 
-        return new MiniTicketDTO(ticket.ticketID);
+        return convertToDTO(ticket);
     }
 
-    private void sendTicketProcessQueue(OrderDTO entity, TicketLog ticket) throws Exception {
-        Showtime showtime       = showtimeService.findById(entity.showtimeID);
-        long     timeStart      = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
-        long     delaySecond    = (timeStart - System.currentTimeMillis()) / 1000;
-        long     delaySecondEnd = (showtime.getTimeTo() - System.currentTimeMillis()) / 1000;
+    // before xxx minutes from movie start time
+    // if customer had not paid
+    // then cancel ticket
+    private void sendTicketProcessingQueue(OrderDTO entity, TicketLog ticket) throws Exception {
+        Showtime showtime = showtimeService.findById(entity.showtimeID);
+        long timeStart = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
+        long delaySecond = (timeStart - System.currentTimeMillis()) / 1000;
 
-        if (delaySecond <= 0) {
-            throw new Exception("[sendTicketProcessQueue] delaySecond < 0");
+        //after movie end, remove booked Seats
+        long delaySecondEnd = (showtime.getTimeTo() - System.currentTimeMillis()) / 1000;
+
+        if (delaySecond <= 0 || delaySecondEnd <= 0) {
+            throw new Exception("[sendTicketProcessingQueue] delaySecond < 0");
         }
 
         producer.sendTicketLogProcessQueue(ticket, delaySecond);
@@ -244,9 +248,30 @@ public class BuzService {
         }
     }
 
-    @RequiredArgsConstructor
-    @AllArgsConstructor
-    private class MiniTicketDTO implements Serializable {
-        public long ticketID;
+    // convert from TicketLogEntity to TicketDTO
+    public TicketDTO convertToDTO(TicketLog ticket) throws Exception{
+
+        Showtime showtime = showtimeService.findById(ticket.showtimeID);
+        Room room = roomService.findById(showtime.roomID);
+        Theater theater = theaterService.findById(room.theaterID);
+
+        TicketDTO dto = new TicketDTO();
+        dto.ticketID = ticket.ticketID;
+        dto.movieName = movieService.findById(showtime.movieID).movieName;
+        dto.date = DateTimeUtils.parseTimestampToString(showtime.timeFrom.getTime(), "dd-MM-yyyy");
+        dto.time = String.format("%s ~ %s",DateTimeUtils.getHHmmFromTimestamp(showtime.timeFrom),
+                DateTimeUtils.getHHmmFromTimestamp(showtime.timeTo));
+        dto.theaterName = theater.theaterName;
+        dto.roomNumber = room.roomNumber + "";
+        dto.totalPrice = ticket.totalPrice;
+        for (Object s: ticket.getSeatCodes()){
+            if (!dto.seatCodes.isEmpty())
+                dto.seatCodes += ", ";
+
+            dto.seatCodes += String.valueOf(s);
+        }
+        dto.extraInfo = ticket.extraInfo;
+
+        return dto;
     }
 }
