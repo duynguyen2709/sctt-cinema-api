@@ -48,7 +48,7 @@ public class ClientPrivateController {
 
     //</editor-fold>
 
-    @PostMapping("/payorder/{ticketID}")
+    @PostMapping("/payticket/{ticketID}")
     public BaseResponse payOrder(@PathVariable long ticketID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -76,7 +76,7 @@ public class ClientPrivateController {
         return res;
     }
 
-    @PostMapping("/createorder")
+    @PostMapping("/createticket")
     public BaseResponse createOrder(@RequestBody OrderDTO entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
