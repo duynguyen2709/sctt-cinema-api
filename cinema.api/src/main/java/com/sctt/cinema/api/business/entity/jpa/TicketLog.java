@@ -60,8 +60,12 @@ public class TicketLog extends BaseJPAEntity {
     }
 
     public void setSeatCodes(List<Object> seatCodes){
-        List<String> list = seatCodes.stream().map(String::valueOf).collect(Collectors.toList());
-        this.seatCodes = GsonUtils.toJsonString(list);
+        if (seatCodes == null){
+            this.seatCodes = "[]";
+        } else {
+            List<String> list = seatCodes.stream().map(String::valueOf).collect(Collectors.toList());
+            this.seatCodes = GsonUtils.toJsonString(list);
+        }
     }
 
     public long getOrderTime(){

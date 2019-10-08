@@ -20,8 +20,9 @@ public class UpdateMovieStatusService {
     @Autowired
     private MovieService movieService;
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 1 0 * * *")
     public void autoUpdateMovieStatus(){
+        log.info("### AutoUpdateMovieStatus triggered ###");
         List<Movie> listMovie = movieService.findAll()
                 .stream()
                 .filter(c -> c.status == MovieStatusEnum.COMING_SOON.getValue())
@@ -33,5 +34,7 @@ public class UpdateMovieStatusService {
                 movieService.update(c);
                 log.info("autoUpdateMovieStatus: {}", GsonUtils.toJsonString(c));
         });
+
+        log.info("### End AutoUpdateMovieStatus ###");
     }
 }

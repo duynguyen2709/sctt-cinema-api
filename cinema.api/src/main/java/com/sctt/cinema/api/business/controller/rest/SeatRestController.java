@@ -20,12 +20,12 @@ public class SeatRestController {
     @Autowired
     private RoomService roomService;
 
-    @GetMapping("/seats/{roomID}")
-    public BaseResponse findByRoomID(@PathVariable Integer roomID) {
+    @GetMapping("/seats")
+    public BaseResponse findByRoomID(@RequestParam(required = false) Integer roomID) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
-            if (roomService.findById(roomID) == null) {
+            if (roomID == null || roomService.findById(roomID) == null) {
                 res = new BaseResponse(ReturnCodeEnum.ROOM_NOT_FOUND);
                 return res;
             }

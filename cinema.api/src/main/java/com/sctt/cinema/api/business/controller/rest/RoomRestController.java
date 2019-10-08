@@ -9,6 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api")
 @Log4j2
@@ -18,11 +21,15 @@ public class RoomRestController {
     private RoomService service;
 
     @GetMapping("/rooms")
-    public BaseResponse findAll(){
+    public BaseResponse findAll(@RequestParam(required = false) Integer theaterID){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findAll();
+            List<Room> data = service.findAll();
+            if (theaterID != null){
+                data = data.stream().filter(c -> c.theaterID == theaterID).collect(Collectors.toList());
+            }
+            res.data = data;
         } catch (Exception e){
             log.error("[findAll] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

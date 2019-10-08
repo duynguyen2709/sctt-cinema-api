@@ -65,7 +65,7 @@ public class Movie extends BaseJPAEntity {
     }
 
     public void setScreenshots(List<String> screenshots){
-        this.screenshots = GsonUtils.toJsonString(screenshots);
+        this.screenshots = (screenshots == null ? "[]" : GsonUtils.toJsonString(screenshots));
     }
 
 
