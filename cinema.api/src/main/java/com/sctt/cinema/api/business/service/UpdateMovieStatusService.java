@@ -20,9 +20,11 @@ public class UpdateMovieStatusService {
     @Autowired
     private MovieService movieService;
 
-    @Scheduled(cron = "0 1 0 * * *")
+    @Scheduled(cron = "${schedule.movieStatusUpdate.cron}")
     public void autoUpdateMovieStatus(){
+
         log.info("### AutoUpdateMovieStatus triggered ###");
+
         List<Movie> listMovie = movieService.findAll()
                 .stream()
                 .filter(c -> c.status == MovieStatusEnum.COMING_SOON.getValue())
