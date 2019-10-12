@@ -4,6 +4,7 @@ import com.sctt.cinema.api.business.entity.jpa.Theater;
 import com.sctt.cinema.api.business.service.jpa.TheaterService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
+import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -67,7 +68,7 @@ public class TheaterRestController {
     @PutMapping("/theaters/{theaterID}")
     public BaseResponse update(@PathVariable Integer theaterID,@RequestBody Theater theater){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
-
+        log.info(GsonUtils.toJsonString(theater));
         try{
             theater.theaterID = theaterID;
 
