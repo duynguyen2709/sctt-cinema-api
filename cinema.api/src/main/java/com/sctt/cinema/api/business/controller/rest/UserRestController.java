@@ -1,10 +1,11 @@
 package com.sctt.cinema.api.business.controller.rest;
 
-import com.sctt.cinema.api.business.entity.jpa.Theater;
-import com.sctt.cinema.api.business.service.jpa.TheaterService;
+import com.sctt.cinema.api.business.entity.jpa.Movie;
+import com.sctt.cinema.api.business.entity.jpa.User;
+import com.sctt.cinema.api.business.service.jpa.MovieService;
+import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
-import com.sctt.cinema.api.util.GsonUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 @Log4j2
-public class TheaterRestController {
+public class UserRestController {
 
     @Autowired
-    private TheaterService service;
+    private UserService service;
 
-    @GetMapping("/theaters")
+    @GetMapping("/users")
     public BaseResponse findAll(){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -31,14 +32,14 @@ public class TheaterRestController {
         return res;
     }
 
-    @GetMapping("/theaters/{theaterID}")
-    public BaseResponse findByID(@PathVariable Integer theaterID){
+    @GetMapping("/users/{email}")
+    public BaseResponse findByID(@PathVariable String email){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findById(theaterID);
+            res.data = service.findById(email);
             if (res.data == null)
-                res = new BaseResponse(ReturnCodeEnum.THEATER_NOT_FOUND);
+                res = new BaseResponse(ReturnCodeEnum.USER_NOT_FOUND);
         } catch (Exception e){
             log.error("[findByID] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -47,16 +48,15 @@ public class TheaterRestController {
         return res;
     }
 
-    @PostMapping("/theaters")
-    public BaseResponse insert(@RequestBody Theater theater){
+    @PostMapping("/users")
+    public BaseResponse insert(@RequestBody User entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            if (!theater.isValid()){
+            if (!entity.isValid()){
                 return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
             }
-
-            res.data = service.create(theater);
+            res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -65,17 +65,16 @@ public class TheaterRestController {
         return res;
     }
 
-    @PutMapping("/theaters/{theaterID}")
-    public BaseResponse update(@PathVariable Integer theaterID,@RequestBody Theater theater){
+    @PutMapping("/users/{email}")
+    public BaseResponse update(@PathVariable String email,@RequestBody User entity){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            theater.theaterID = theaterID;
-
-            if (!theater.isValid()){
+            entity.email = email;
+            if (!entity.isValid()){
                 return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
             }
-            res.data = service.update(theater);
+            res.data = service.update(entity);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
@@ -84,12 +83,12 @@ public class TheaterRestController {
         return res;
     }
 
-    @DeleteMapping("/theaters/{theaterID}")
-    public BaseResponse delete(@PathVariable Integer theaterID){
+    @DeleteMapping("/users/{email}")
+    public BaseResponse delete(@PathVariable String email){
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            service.delete(theaterID);
+            service.delete(email);
             res.data = true;
         } catch (Exception e){
             log.error("[delete] ex: {}",e.getMessage());

@@ -6,6 +6,7 @@ import com.sctt.cinema.api.business.entity.response.UserDTO;
 import com.sctt.cinema.api.business.entity.jpa.User;
 import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
+import com.sctt.cinema.api.common.enums.LoginTypeEnum;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import com.sctt.cinema.api.common.enums.RoleEnum;
 import lombok.extern.log4j.Log4j2;
@@ -41,7 +42,21 @@ public class JwtAuthenticationController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
+            if (req.type == LoginTypeEnum.NORMAL.getValue()) {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
+            } else if (req.type == LoginTypeEnum._3RD_PARTY.getValue()){
+                User oldUser = userService.findById(req.username);
+                if (oldUser == null){
+                    oldUser = new User();
+                    oldUser.email = req.username;
+                    oldUser.role = RoleEnum.CUSTOMER.getValue();
+                    oldUser.password = "123";
+                    oldUser.fullName = req.fullName == null ? "" : req.fullName;
+                    oldUser.phoneNumber = req.phoneNumber == null ? "" : req.phoneNumber;
+                    userService.create(oldUser);
+                }
+            }
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(req.username);
 
             LoginDTO response = new LoginDTO();
