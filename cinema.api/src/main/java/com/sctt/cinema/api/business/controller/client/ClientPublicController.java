@@ -172,8 +172,7 @@ public class ClientPublicController {
                     detailMap.get(format).add(new ShowtimeDTO.ShowtimeDetailDTO(showtime));
                 }
 
-            }
-            else if (type == ShowtimeTypeEnum.THEATER.getValue()) {
+            } else if (type == ShowtimeTypeEnum.THEATER.getValue()) {
                 listShowtimeFiltered = listShowtimeFiltered.stream()
                                 .filter(c -> c.theaterID == id)
                                 .collect(Collectors.toList());
@@ -195,6 +194,8 @@ public class ClientPublicController {
                     detailMap.get(format).add(new ShowtimeDTO.ShowtimeDetailDTO(showtime));
                 }
             }
+
+            res.data = dto;
         } catch (Exception e) {
             log.error("[getShowtimeDetail] type {}, id {}, date {}, ex: {}", type, id, date, e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

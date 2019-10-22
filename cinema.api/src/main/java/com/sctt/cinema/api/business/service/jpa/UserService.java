@@ -53,6 +53,7 @@ public class UserService extends BaseJPAService<User,String>{
     public User update(User user) {
         User old = findById(user.email);
         user.password = old.password;
+        user.creationDate = old.creationDate;
 
         User t = repo.save(user);
 
@@ -77,6 +78,7 @@ public class UserService extends BaseJPAService<User,String>{
     public User updatePassword(User user){
         User old = findById(user.email);
         old.password = new BCryptPasswordEncoder().encode(user.password);
+
         User t = repo.save(old);
 
         cacheMap.replace(t.email, t);

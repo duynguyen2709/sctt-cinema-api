@@ -17,15 +17,8 @@ import java.util.Map;
 @NoArgsConstructor
 public class ShowtimeDTO implements Serializable {
 
+    // <TextDisplay, <Format, List<Detail> >>
     public Map<String, Map<String, List<ShowtimeDetailDTO>>> showtimes = new HashMap<>();
-
-//    @Data
-//    @AllArgsConstructor
-//    @NoArgsConstructor
-//    public class ShowtimeByFormatDTO implements Serializable {
-//        // <Format, List<detail>>
-//        public  details = new HashMap<>();
-//    }
 
     @Data
     @AllArgsConstructor
