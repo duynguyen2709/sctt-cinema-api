@@ -60,7 +60,7 @@ public class Showtime extends BaseJPAEntity {
     public boolean isValid() {
         return movieID > 0 &&
                 (movieFormat == 0 || movieFormat == 1) &&
-                getTimeFrom() > 0 && getTimeTo() > 0 &&
+                getTimeFrom() > 0 &&
                 (status == 0 || status == 1);
     }
 }
