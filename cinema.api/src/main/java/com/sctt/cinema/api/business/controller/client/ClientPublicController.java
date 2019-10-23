@@ -14,14 +14,12 @@ import com.sctt.cinema.api.common.enums.MovieStatusEnum;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import com.sctt.cinema.api.common.enums.ShowtimeTypeEnum;
 import com.sctt.cinema.api.util.DateTimeUtils;
+import com.sctt.cinema.api.util.TimeComparator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -192,6 +190,12 @@ public class ClientPublicController {
                     }
 
                     detailMap.get(format).add(new ShowtimeDTO.ShowtimeDetailDTO(showtime));
+                }
+            }
+
+            for (Map<String, List<ShowtimeDTO.ShowtimeDetailDTO>> map : dto.showtimes.values()){
+                for (List<ShowtimeDTO.ShowtimeDetailDTO> list : map.values()){
+                    list.sort(new TimeComparator());
                 }
             }
 

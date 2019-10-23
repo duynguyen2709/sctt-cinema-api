@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sctt.cinema.api.business.entity.jpa.Showtime;
 import com.sctt.cinema.api.util.DateTimeUtils;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,13 @@ public class ShowtimeDTO implements Serializable {
         public int showtimeID;
         public String startTime;
 
+        @JsonIgnore
+        public long timeFrom;
+
         public ShowtimeDetailDTO(Showtime showtime){
             this.showtimeID = showtime.showtimeID;
             this.startTime = DateTimeUtils.getHHmmFromTimestamp(showtime.timeFrom);
+            this.timeFrom = showtime.getTimeFrom();
         }
     }
 }

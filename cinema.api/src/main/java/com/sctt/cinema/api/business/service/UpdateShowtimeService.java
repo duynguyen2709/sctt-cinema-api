@@ -27,10 +27,7 @@ public class UpdateShowtimeService {
 
         log.info("### AutoUpdateShowtime triggered ###");
 
-        List<Showtime> listShowtime = showtimeService.findAll()
-                .stream()
-                .filter(c -> c.getTimeTo() <= System.currentTimeMillis())
-                .collect(Collectors.toList());
+        List<Showtime> listShowtime = showtimeService.findAll();
 
         listShowtime.forEach(c -> {
             long timeFrom = c.getTimeFrom() + 86400 * 1000;
