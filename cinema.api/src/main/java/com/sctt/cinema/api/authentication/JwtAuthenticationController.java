@@ -42,21 +42,7 @@ public class JwtAuthenticationController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
-            if (req.type == LoginTypeEnum.NORMAL.getValue()) {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
-            } else if (req.type == LoginTypeEnum._3RD_PARTY.getValue()){
-                User oldUser = userService.findById(req.username);
-                if (oldUser == null){
-                    oldUser = new User();
-                    oldUser.email = req.username;
-                    oldUser.role = RoleEnum.CUSTOMER.getValue();
-                    oldUser.password = "123";
-                    oldUser.fullName = req.fullName == null ? "" : req.fullName;
-                    oldUser.phoneNumber = req.phoneNumber == null ? "" : req.phoneNumber;
-                    userService.create(oldUser);
-                }
-            }
-
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
             UserDetails userDetails = userDetailsService.loadUserByUsername(req.username);
 
             LoginDTO response = new LoginDTO();
