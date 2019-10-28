@@ -25,6 +25,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         if (user != null)
             return new User(username, user.password, new ArrayList<>());
         else
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with email: " + username);
     }
 }

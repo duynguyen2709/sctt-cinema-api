@@ -6,7 +6,6 @@ import com.sctt.cinema.api.business.entity.response.UserDTO;
 import com.sctt.cinema.api.business.entity.jpa.User;
 import com.sctt.cinema.api.business.service.jpa.UserService;
 import com.sctt.cinema.api.common.BaseResponse;
-import com.sctt.cinema.api.common.enums.LoginTypeEnum;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import com.sctt.cinema.api.common.enums.RoleEnum;
 import lombok.extern.log4j.Log4j2;
@@ -42,14 +41,14 @@ public class JwtAuthenticationController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username, req.password));
-            UserDetails userDetails = userDetailsService.loadUserByUsername(req.username);
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.email, req.password));
+            UserDetails userDetails = userDetailsService.loadUserByUsername(req.email);
 
             LoginDTO response = new LoginDTO();
 
-            String token = jwtTokenUtil.generateToken(userDetails.getUsername(), userService.findById(req.username).role);
+            String token = jwtTokenUtil.generateToken(userDetails.getUsername(), userService.findById(req.email).role);
             UserDTO user = new UserDTO();
-            user.clone(userService.findById(req.username));
+            user.clone(userService.findById(req.email));
 
             response.token = token;
             response.user = user;
@@ -74,7 +73,7 @@ public class JwtAuthenticationController {
                 return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
             }
             JwtRequest oldReq = new JwtRequest();
-            oldReq.username = user.email;
+            oldReq.email = user.email;
             oldReq.password = user.password;
 
             user.role = RoleEnum.CUSTOMER.getValue();
