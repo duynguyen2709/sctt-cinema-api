@@ -254,10 +254,12 @@ public class BuzService {
         Showtime showtime = showtimeService.findById(ticket.showtimeID);
         Room room = roomService.findById(showtime.roomID);
         Theater theater = theaterService.findById(room.theaterID);
+        Movie movie = movieService.findById(showtime.movieID);
 
         TicketDTO dto = new TicketDTO();
         dto.ticketID = ticket.ticketID;
-        dto.movieName = movieService.findById(showtime.movieID).movieName;
+        dto.movieName = movie.movieName;
+        dto.poster = movie.imageURL;
         dto.date = DateTimeUtils.parseTimestampToString(showtime.timeFrom.getTime(), "dd-MM-yyyy");
         dto.time = String.format("%s ~ %s",DateTimeUtils.getHHmmFromTimestamp(showtime.timeFrom),
                 DateTimeUtils.getHHmmFromTimestamp(showtime.timeTo));

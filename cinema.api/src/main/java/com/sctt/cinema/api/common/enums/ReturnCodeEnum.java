@@ -37,6 +37,9 @@ public enum ReturnCodeEnum {
     PARAM_TYPE_INVALID(-21),
     PARAM_ID_INVALID(-22),
     PARAM_DATE_INVALID(-23),
+
+    TICKET_CANCELLED(-24),
+    TICKET_PAID(-25)
     ;
 
 

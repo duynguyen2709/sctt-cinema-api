@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class TicketDTO implements Serializable {
     public long   ticketID;
     public String movieName;
+    public String poster;
     public String date;
     public String time;
     public String theaterName;

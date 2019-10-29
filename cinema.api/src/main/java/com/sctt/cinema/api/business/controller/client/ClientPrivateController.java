@@ -59,15 +59,22 @@ public class ClientPrivateController {
                 return res;
             }
 
-            ticket.status = TicketStatusEnum.SUCCESS.getValue();
-            ticketLogService.update(ticket);
+            if (ticket.status == TicketStatusEnum.PAYING.getValue()) {
+                ticket.status = TicketStatusEnum.SUCCESS.getValue();
+                ticketLogService.update(ticket);
 
-            //only update when user had scanned ticket to pay
-            User user = userService.findById(ticket.email);
-            user.totalAccumulation += ticket.totalPrice;
-            userService.update(user);
+                //only update when user had scanned ticket to pay
+                User user = userService.findById(ticket.email);
+                user.totalAccumulation += ticket.totalPrice;
+                userService.update(user);
 
-            //res.data = true;
+            } else if (ticket.status == TicketStatusEnum.SUCCESS.getValue()) {
+                res = new BaseResponse(ReturnCodeEnum.TICKET_PAID);
+
+            } else if (ticket.status == TicketStatusEnum.CANCELLED.getValue()) {
+                res = new BaseResponse(ReturnCodeEnum.TICKET_CANCELLED);
+            }
+
         } catch (Exception e){
             log.error("[payOrder] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
