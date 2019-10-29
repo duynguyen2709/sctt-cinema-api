@@ -1,8 +1,10 @@
 package com.sctt.cinema.api.business.service;
 
+import com.sctt.cinema.api.business.entity.jpa.BuzConfig;
 import com.sctt.cinema.api.business.entity.jpa.Showtime;
 import com.sctt.cinema.api.business.entity.jpa.TicketLog;
 import com.sctt.cinema.api.business.service.activemq.ActiveMQProducer;
+import com.sctt.cinema.api.business.service.jpa.BuzConfigService;
 import com.sctt.cinema.api.business.service.jpa.ShowtimeService;
 import com.sctt.cinema.api.business.service.jpa.TicketLogService;
 import com.sctt.cinema.api.common.enums.TicketStatusEnum;
@@ -31,6 +33,9 @@ public class UpdateTicketStatusService {
     @Autowired
     private ActiveMQProducer producer;
 
+    @Autowired
+    private BuzConfigService buzConfigService;
+
     @Order(Ordered.LOWEST_PRECEDENCE)
     @EventListener(ApplicationReadyEvent.class)
     public void autoUpdate(){
@@ -38,11 +43,18 @@ public class UpdateTicketStatusService {
                 .stream().filter(c -> c.status == TicketStatusEnum.PAYING.getValue())
                 .collect(Collectors.toList());
 
+        if (pendingTickets.isEmpty())
+            return;
+
+        String key = String.format("%s_%s", "Ticket", "CancelMinutesBeforeStart");
+        BuzConfig conf = buzConfigService.findById(key);
+        int minutes = Integer.parseInt(conf.buzValue);
+
         for (TicketLog ticket: pendingTickets){
             Showtime showtime = showtimeService.findById(ticket.showtimeID);
 
-            long timeStart = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
-            if (System.currentTimeMillis() - timeStart <= 0){
+            long timeStart = showtime.getTimeFrom() - minutes * 1000 * 60;
+            if (System.currentTimeMillis() >= timeStart){
                 producer.sendTicketLogProcessQueue(ticket,0);
 
                 log.info("### Auto Update Ticket " + GsonUtils.toJsonString(ticket));

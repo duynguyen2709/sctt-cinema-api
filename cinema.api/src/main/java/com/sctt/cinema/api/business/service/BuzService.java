@@ -230,7 +230,12 @@ public class BuzService {
     // then cancel ticket
     private void sendTicketProcessingQueue(OrderDTO entity, TicketLog ticket) throws Exception {
         Showtime showtime = showtimeService.findById(entity.showtimeID);
-        long timeStart = showtime.getTimeFrom() - producer.cancelMinutesBeforeStart * 1000 * 60;
+
+        String key = String.format("%s_%s", "Ticket", "CancelMinutesBeforeStart");
+        BuzConfig conf = buzConfigService.findById(key);
+        int minutes = Integer.parseInt(conf.buzValue);
+
+        long timeStart = showtime.getTimeFrom() - minutes * 1000 * 60;
         long delaySecond = (timeStart - System.currentTimeMillis()) / 1000;
 
         //after movie end, remove booked Seats

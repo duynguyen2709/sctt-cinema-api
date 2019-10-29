@@ -18,9 +18,6 @@ public class ActiveMQProducer {
     @Value("${activemq.bookedSeatRemoveQueue}")
     private String bookedSeatRemoveQueue;
 
-    @Value("${activemq.ticketCancelMinutesBeforeStart}")
-    public int cancelMinutesBeforeStart;
-
     public void sendTicketLogProcessQueue(TicketLog entity, long delaySecond){
         jmsTemplate.convertAndSend(ticketProcessQueue, entity,
                 message -> {
