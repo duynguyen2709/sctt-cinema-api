@@ -82,18 +82,16 @@ public class ClientPrivateController {
 
         try{
             // validate data
-            if (showtimeService.findById(entity.showtimeID) == null){
+            Showtime showtime = showtimeService.findById(entity.showtimeID);
+            if (showtime == null){
                 res = new BaseResponse(ReturnCodeEnum.SHOWTIME_NOT_FOUND);
                 return res;
             }
 
+            entity.roomID = showtime.roomID;
+
             if (userService.findById(entity.email) == null){
                 res = new BaseResponse(ReturnCodeEnum.USER_NOT_FOUND);
-                return res;
-            }
-
-            if (roomService.findById(entity.roomID) == null){
-                res = new BaseResponse(ReturnCodeEnum.ROOM_NOT_FOUND);
                 return res;
             }
 
