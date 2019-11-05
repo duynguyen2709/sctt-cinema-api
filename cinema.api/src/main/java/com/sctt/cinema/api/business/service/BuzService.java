@@ -102,6 +102,40 @@ public class BuzService {
         return res;
     }
 
+    private long getPrice(long basePrice, String buzKey){
+        String key = String.format("%s_%s", "TicketPrice", buzKey);
+        String increaseType          = String.format("%s_%s", "TicketPrice", "Type");
+
+        BuzConfig priceConf = buzConfigService.findById(key);
+        BuzConfig increaseTypeConf          = buzConfigService.findById(increaseType);
+
+        if (priceConf != null
+                && increaseTypeConf != null
+                && !priceConf.buzValue.isEmpty()
+                && !increaseTypeConf.buzValue.isEmpty())
+        {
+            int    value = Integer.parseInt(priceConf.buzValue);
+            String type  = increaseTypeConf.buzValue;
+
+            if (type.equalsIgnoreCase("direct")) {
+                return basePrice + value;
+            }
+            else if (type.equalsIgnoreCase("percentage")) {
+                return basePrice * (100 + value) / 100;
+            }
+        }
+
+        return basePrice;
+    }
+
+    public long get3DFormatPrice(long basePrice) {
+        return getPrice(basePrice, "3DMovie");
+    }
+
+    public long getVipSeatPrice(long basePrice) {
+        return getPrice(basePrice, "VIPSeat");
+    }
+
     private long calcBySeatType(long res, OrderDTO entity) {
         Showtime showtime  = showtimeService.findById(entity.showtimeID);
         long     basePrice = movieService.findById(showtime.movieID).baseTicketPrice;

@@ -7,6 +7,7 @@ import com.sctt.cinema.api.business.entity.response.MovieListDTO;
 import com.sctt.cinema.api.business.entity.response.RoomStatusDTO;
 import com.sctt.cinema.api.business.entity.response.SeatStatusDTO;
 import com.sctt.cinema.api.business.entity.response.ShowtimeDTO;
+import com.sctt.cinema.api.business.service.BuzService;
 import com.sctt.cinema.api.business.service.jpa.*;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.MovieFormatEnum;
@@ -42,6 +43,9 @@ public class ClientPublicController {
 
     @Autowired
     private RoomSeatService roomSeatService;
+
+    @Autowired
+    private BuzService buzService;
     //</editor-fold>
 
     @GetMapping("/movies")
@@ -72,9 +76,18 @@ public class ClientPublicController {
                 return new BaseResponse(ReturnCodeEnum.SHOWTIME_NOT_FOUND);
             }
 
+            Movie movie = movieService.findById(showtime.movieID);
+            long basePrice = movie.baseTicketPrice;
+
+            if (showtime.movieFormat == MovieFormatEnum._3D.getValue()){
+                basePrice = buzService.get3DFormatPrice(basePrice);
+            }
+
             RoomStatusDTO data = new RoomStatusDTO();
             data.showtimeID = showtimeID;
             data.roomID = showtime.roomID;
+            data.basePrice = basePrice;
+            data.VIPPrice = buzService.getVipSeatPrice(basePrice);
             data.seats = convertSeatStatus(showtime);
 
             res.data = data;

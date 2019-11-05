@@ -15,5 +15,9 @@ public class RoomStatusDTO implements Serializable {
 
     public int roomID;
 
+    public long basePrice;
+
+    public long VIPPrice;
+
     public SeatStatusDTO[][] seats;
 }
