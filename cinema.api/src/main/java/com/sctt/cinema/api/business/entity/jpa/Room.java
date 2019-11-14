@@ -24,6 +24,9 @@ public class Room extends BaseJPAEntity {
     @Column
     public int theaterID;
 
+    @Transient
+    public String theaterName;
+
     @Override
     public boolean isValid() {
         return roomNumber > 0 & theaterID > 0;

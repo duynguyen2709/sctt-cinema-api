@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -81,27 +82,15 @@ public class SeatRestController {
     }
 
     @GetMapping("/seats")
-    public BaseResponse findAll() {
+    public BaseResponse findAll(@RequestParam(required = false) Integer roomID) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try {
-            res.data = seatService.findAll();
-        } catch (Exception e) {
-            log.error("[findAll] ex: {}", e.getMessage());
-            res = BaseResponse.EXCEPTION_RESPONSE;
-        }
-
-        return res;
-    }
-
-    @GetMapping("/seats/{roomID}")
-    public BaseResponse findByRoomID(@PathVariable int roomID) {
-        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
-
-        try {
-            res.data = seatService.findAll().stream()
-                    .filter(c -> c.roomID == roomID)
-                    .collect(Collectors.toList());
+            List<Seat> data = seatService.findAll();
+            if (roomID != null){
+                data = data.stream().filter(c -> c.roomID == roomID).collect(Collectors.toList());
+            }
+            res.data = data;
         } catch (Exception e) {
             log.error("[findAll] ex: {}", e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
