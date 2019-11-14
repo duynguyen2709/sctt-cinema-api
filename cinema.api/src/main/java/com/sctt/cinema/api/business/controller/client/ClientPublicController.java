@@ -167,7 +167,13 @@ public class ClientPublicController {
                         .collect(Collectors.toList());
 
                 for (Showtime showtime : listShowtimeFiltered) {
-                    String theaterName = theaterService.findById(showtime.theaterID).theaterName;
+                    Theater theater = theaterService.findById(showtime.theaterID);
+
+                    if (theater == null){
+                        log.error("Theater {} return null", showtime.theaterID);
+                        continue;
+                    }
+                    String theaterName = theater.theaterName;
 
                     if (!dto.showtimes.containsKey(theaterName)) {
                         dto.showtimes.put(theaterName, new HashMap<>());
@@ -189,7 +195,13 @@ public class ClientPublicController {
                                 .collect(Collectors.toList());
 
                 for (Showtime showtime : listShowtimeFiltered) {
-                    String movieName = movieService.findById(showtime.movieID).movieName;
+                    Movie movie = movieService.findById(showtime.movieID);
+
+                    if (movie == null){
+                        log.error("Movie {} return null", showtime.movieID);
+                        continue;
+                    }
+                    String movieName = movie.movieName;
 
                     if (!dto.showtimes.containsKey(movieName)) {
                         dto.showtimes.put(movieName, new HashMap<>());
