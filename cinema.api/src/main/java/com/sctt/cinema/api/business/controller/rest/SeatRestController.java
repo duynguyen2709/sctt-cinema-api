@@ -1,13 +1,17 @@
 package com.sctt.cinema.api.business.controller.rest;
 
+import com.sctt.cinema.api.business.entity.jpa.Seat;
 import com.sctt.cinema.api.business.entity.request.RoomSeatMappingDTO;
 import com.sctt.cinema.api.business.service.jpa.RoomSeatService;
 import com.sctt.cinema.api.business.service.jpa.RoomService;
+import com.sctt.cinema.api.business.service.jpa.SeatService;
 import com.sctt.cinema.api.common.BaseResponse;
 import com.sctt.cinema.api.common.enums.ReturnCodeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -20,7 +24,10 @@ public class SeatRestController {
     @Autowired
     private RoomService roomService;
 
-    @GetMapping("/seats")
+    @Autowired
+    private SeatService seatService;
+
+    @GetMapping("/seats/batch")
     public BaseResponse findByRoomID(@RequestParam(required = false) Integer roomID) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -39,7 +46,7 @@ public class SeatRestController {
         return res;
     }
 
-    @PostMapping("/seats")
+    @PostMapping("/seats/batch")
     public BaseResponse insert(@RequestBody RoomSeatMappingDTO entity) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -56,7 +63,7 @@ public class SeatRestController {
         return res;
     }
 
-    @PutMapping("/seats/{roomID}")
+    @PutMapping("/seats/batch/{roomID}")
     public BaseResponse update(@RequestBody RoomSeatMappingDTO entity) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
@@ -67,6 +74,88 @@ public class SeatRestController {
             res.data = true;
         } catch (Exception e) {
             log.error("[update] ex: {}", e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @GetMapping("/seats")
+    public BaseResponse findAll() {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try {
+            res.data = seatService.findAll();
+        } catch (Exception e) {
+            log.error("[findAll] ex: {}", e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @GetMapping("/seats/{roomID}")
+    public BaseResponse findByRoomID(@PathVariable int roomID) {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try {
+            res.data = seatService.findAll().stream()
+                    .filter(c -> c.roomID == roomID)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("[findAll] ex: {}", e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @PostMapping("/seats")
+    public BaseResponse insertSeat(@RequestBody Seat entity) {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try {
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
+            res.data = seatService.create(entity);
+        } catch (Exception e) {
+            log.error("[insertSeat] ex: {}", e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @PutMapping("/seats/{roomID}/{seatCode}")
+    public BaseResponse updateSeat(@PathVariable int roomID, @PathVariable String seatCode,
+                               @RequestBody Seat entity) {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try {
+            entity.roomID = roomID;
+            entity.seatCode = seatCode;
+            if (!entity.isValid()){
+                return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
+            }
+            res.data = seatService.update(entity);
+        } catch (Exception e) {
+            log.error("[updateSeat] ex: {}", e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
+    @DeleteMapping("/seats/{roomID}/{seatCode}")
+    public BaseResponse deleteSeat(@PathVariable int roomID, @PathVariable String seatCode) {
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try {
+            seatService.delete(String.format("%s_%s",roomID,seatCode));
+            res.data = true;
+        } catch (Exception e) {
+            log.error("[deleteSeat] ex: {}", e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 

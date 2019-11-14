@@ -55,6 +55,11 @@ public class ShowtimeRestController {
             if (!entity.isValid()){
                 return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
             }
+
+            if (!checkValidTime(entity)){
+                return new BaseResponse(ReturnCodeEnum.SHOWTIME_TIMEFROM_NOT_VALID);
+            }
+
             res.data = service.create(entity);
         } catch (Exception e){
             log.error("[insert] ex: {}",e.getMessage());
@@ -62,6 +67,12 @@ public class ShowtimeRestController {
         }
 
         return res;
+    }
+
+    private boolean checkValidTime(Showtime entity) {
+        long timeFrom = entity.timeFrom.getTime();
+        return service.findAll().stream().anyMatch(c -> c.status == 1 &&
+                c.roomID == entity.roomID && c.timeTo.getTime() > timeFrom);
     }
 
     @PutMapping("/showtimes/{showtimeID}")
@@ -73,6 +84,11 @@ public class ShowtimeRestController {
             if (!entity.isValid()){
                 return new BaseResponse(ReturnCodeEnum.DATA_NOT_VALID);
             }
+
+            if (!checkValidTime(entity)){
+                return new BaseResponse(ReturnCodeEnum.SHOWTIME_TIMEFROM_NOT_VALID);
+            }
+
             res.data = service.update(entity);
         } catch (Exception e){
             log.error("[update] ex: {}",e.getMessage());
