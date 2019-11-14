@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Data
 @Entity
@@ -44,8 +47,10 @@ public class Showtime extends BaseJPAEntity {
         return timeFrom.getTime();
     }
 
-    public void setTimeFrom(long timestamp){
-        this.timeFrom = new Timestamp(timestamp);
+    public void setTimeFrom(String timestamp) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        Date             parsedDate = dateFormat.parse(timestamp);
+        this.timeFrom  = new java.sql.Timestamp(parsedDate.getTime());
     }
 
     public long getTimeTo(){

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Data
@@ -68,6 +70,9 @@ public class Movie extends BaseJPAEntity {
         this.screenshots = (screenshots == null ? "[]" : GsonUtils.toJsonString(screenshots));
     }
 
+    public void setDateFrom(String dateFrom) {
+        this.dateFrom = Date.valueOf(dateFrom);
+    }
 
     @Override
     public boolean isValid() {

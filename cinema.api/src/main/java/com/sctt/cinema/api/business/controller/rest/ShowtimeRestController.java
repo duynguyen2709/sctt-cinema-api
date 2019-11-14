@@ -71,8 +71,10 @@ public class ShowtimeRestController {
 
     private boolean checkValidTime(Showtime entity) {
         long timeFrom = entity.timeFrom.getTime();
+        long timeTo = entity.timeTo.getTime();
         return service.findAll().stream().anyMatch(c -> c.status == 1 &&
-                c.roomID == entity.roomID && c.timeTo.getTime() > timeFrom);
+                c.roomID == entity.roomID &&
+                (c.timeTo.getTime() > timeFrom || c.timeFrom.getTime() < timeTo));
     }
 
     @PutMapping("/showtimes/{showtimeID}")

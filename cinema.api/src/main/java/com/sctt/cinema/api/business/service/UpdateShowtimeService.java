@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class UpdateShowtimeService {
         listShowtime.forEach(c -> {
             long timeFrom = c.getTimeFrom() + 86400 * 1000;
             long timeTo = c.getTimeTo() + 86400 * 1000;
-            c.setTimeFrom(timeFrom);
+            c.timeFrom = new Timestamp(timeFrom);
             c.setTimeTo(timeTo);
             showtimeService.update(c);
         });
