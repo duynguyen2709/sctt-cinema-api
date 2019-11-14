@@ -99,6 +99,22 @@ public class SeatRestController {
         return res;
     }
 
+    @GetMapping("/seats/{roomID}/{seatCode}")
+    public BaseResponse findByID(@PathVariable int roomID, @PathVariable String seatCode){
+        BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
+
+        try{
+            res.data = seatService.findById(String.format("%s_%s", roomID, seatCode));
+            if (res.data == null)
+                res = new BaseResponse(ReturnCodeEnum.BUZ_CONFIG_NOT_FOUND);
+        } catch (Exception e){
+            log.error("[findByID] ex: {}",e.getMessage());
+            res = BaseResponse.EXCEPTION_RESPONSE;
+        }
+
+        return res;
+    }
+
     @PostMapping("/seats")
     public BaseResponse insertSeat(@RequestBody Seat entity) {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
