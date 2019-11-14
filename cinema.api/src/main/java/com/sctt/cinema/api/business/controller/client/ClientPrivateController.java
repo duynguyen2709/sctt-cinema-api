@@ -76,7 +76,7 @@ public class ClientPrivateController {
             }
 
         } catch (Exception e){
-            log.error("[payOrder] ex: {}",e.getMessage());
+            log.error("[payOrder] ex: {}",e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
@@ -114,7 +114,7 @@ public class ClientPrivateController {
             res.data = buzService.createTicket(entity);
 
         } catch (Exception e){
-            log.error("[createOrder] ex: {}",e.getMessage());
+            log.error("[createOrder] ex: {}",e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
@@ -141,7 +141,7 @@ public class ClientPrivateController {
 
             res.data = listDTO;
         } catch (Exception e){
-            log.error("[getHistory] ex: {}",e.getMessage());
+            log.error("[getHistory] ex: {}",e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 

@@ -59,7 +59,7 @@ public class JwtAuthenticationController {
             return new BaseResponse(ReturnCodeEnum.WRONG_USERNAME_OR_PASSWORD);
 
         } catch (Exception e){
-            log.error("[login] ex {}", e.getMessage());
+            log.error("[login] ex {}", e.getMessage(), e);
             return new BaseResponse(ReturnCodeEnum.EXCEPTION);
         }
         return res;
@@ -81,7 +81,7 @@ public class JwtAuthenticationController {
             return login(oldReq);
 
         } catch (Exception e){
-            log.error("[signup] ex {}", e.getMessage());
+            log.error("[signup] ex {}", e.getMessage(), e);
             return new BaseResponse(ReturnCodeEnum.EXCEPTION);
         }
     }

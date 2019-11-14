@@ -59,7 +59,7 @@ public class ClientPublicController {
 
             res.data = data;
         } catch (Exception e) {
-            log.error("[homeScreen] ex: {}", e.getMessage());
+            log.error("[homeScreen] ex: {}", e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
@@ -92,7 +92,7 @@ public class ClientPublicController {
 
             res.data = data;
         } catch (Exception e) {
-            log.error("[getRoomStatus] ex: {}", e.getMessage());
+            log.error("[getRoomStatus] ex: {}", e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
@@ -135,7 +135,7 @@ public class ClientPublicController {
                 }
             }
         } catch (Exception e) {
-            log.error("[convertSeatStatus] ex: {}", e.getMessage());
+            log.error("[convertSeatStatus] ex: {}", e.getMessage(), e);
             throw e;
         }
 
@@ -214,7 +214,7 @@ public class ClientPublicController {
 
             res.data = dto;
         } catch (Exception e) {
-            log.error("[getShowtimeDetail] type {}, id {}, date {}, ex: {}", type, id, date, e.getMessage());
+            log.error("[getShowtimeDetail] type {}, id {}, date {}, ex: {}", type, id, date, e.getMessage(), e);
             res = BaseResponse.EXCEPTION_RESPONSE;
         }
 
