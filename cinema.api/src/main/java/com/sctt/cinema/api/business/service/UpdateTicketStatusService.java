@@ -53,7 +53,7 @@ public class UpdateTicketStatusService {
         for (TicketLog ticket: pendingTickets){
             Showtime showtime = showtimeService.findById(ticket.showtimeID);
 
-            long timeStart = showtime.getTimeFrom() - minutes * 1000 * 60;
+            long timeStart = showtime.timeFrom.getTime() - minutes * 1000 * 60;
             if (System.currentTimeMillis() >= timeStart){
                 producer.sendTicketLogProcessQueue(ticket,0);
 

@@ -34,7 +34,7 @@ public class ShowtimeDTO implements Serializable {
         public ShowtimeDetailDTO(Showtime showtime){
             this.showtimeID = showtime.showtimeID;
             this.startTime = DateTimeUtils.getHHmmFromTimestamp(showtime.timeFrom);
-            this.timeFrom = showtime.getTimeFrom();
+            this.timeFrom = showtime.timeFrom.getTime();
         }
     }
 }

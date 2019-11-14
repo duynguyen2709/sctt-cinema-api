@@ -31,10 +31,10 @@ public class UpdateShowtimeService {
         List<Showtime> listShowtime = showtimeService.findAll();
 
         listShowtime.forEach(c -> {
-            long timeFrom = c.getTimeFrom() + 86400 * 1000;
-            long timeTo = c.getTimeTo() + 86400 * 1000;
+            long timeFrom = c.timeFrom.getTime() + 86400 * 1000;
+            long timeTo = c.timeTo.getTime() + 86400 * 1000;
             c.timeFrom = new Timestamp(timeFrom);
-            c.setTimeTo(timeTo);
+            c.timeTo = new Timestamp(timeTo);
             showtimeService.update(c);
         });
 

@@ -43,8 +43,8 @@ public class Showtime extends BaseJPAEntity {
     @Column
     public int status;
 
-    public long getTimeFrom(){
-        return timeFrom.getTime();
+    public String getTimeFrom(){
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm").format(this.timeFrom);
     }
 
     public void setTimeFrom(String timestamp) throws ParseException {
@@ -65,7 +65,7 @@ public class Showtime extends BaseJPAEntity {
     public boolean isValid() {
         return movieID > 0 &&
                 (movieFormat == 0 || movieFormat == 1) &&
-                getTimeFrom() > 0 &&
+                timeFrom.getTime() > 0 &&
                 (status == 0 || status == 1);
     }
 }
