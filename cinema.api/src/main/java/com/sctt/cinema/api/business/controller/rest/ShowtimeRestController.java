@@ -1,6 +1,8 @@
 package com.sctt.cinema.api.business.controller.rest;
 
+import com.sctt.cinema.api.business.entity.jpa.Movie;
 import com.sctt.cinema.api.business.entity.jpa.Showtime;
+import com.sctt.cinema.api.business.service.jpa.MovieService;
 import com.sctt.cinema.api.business.service.jpa.ShowtimeService;
 import com.sctt.cinema.api.business.service.jpa.ShowtimeService;
 import com.sctt.cinema.api.common.BaseResponse;
@@ -16,6 +18,9 @@ public class ShowtimeRestController {
 
     @Autowired
     private ShowtimeService service;
+
+    @Autowired
+    private MovieService movieService;
 
     @GetMapping("/showtimes")
     public BaseResponse findAll(){
@@ -70,8 +75,10 @@ public class ShowtimeRestController {
     }
 
     private boolean checkValidTime(Showtime entity) {
-        long timeFrom = entity.timeFrom.getTime();
-        long timeTo = entity.timeTo.getTime();
+        long  timeFrom = entity.timeFrom.getTime();
+        Movie movie    = movieService.findById(entity.movieID);
+        long  timeTo   = entity.timeFrom.getTime() + movie.timeInMinute * 60 * 1000;
+
         return service.findAll().stream().anyMatch(c -> c.status == 1 &&
                 c.roomID == entity.roomID &&
                 (c.timeTo.getTime() > timeFrom || c.timeFrom.getTime() < timeTo));
