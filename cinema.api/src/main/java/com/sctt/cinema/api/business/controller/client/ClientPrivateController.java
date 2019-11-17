@@ -61,12 +61,14 @@ public class ClientPrivateController {
 
             if (ticket.status == TicketStatusEnum.PAYING.getValue()) {
                 ticket.status = TicketStatusEnum.SUCCESS.getValue();
-                ticketLogService.update(ticket);
+                ticket = ticketLogService.update(ticket);
 
                 //only update when user had scanned ticket to pay
                 User user = userService.findById(ticket.email);
                 user.totalAccumulation += ticket.totalPrice;
                 userService.update(user);
+
+                res.data = buzService.convertToDTO(ticket);
 
             } else if (ticket.status == TicketStatusEnum.SUCCESS.getValue()) {
                 res = new BaseResponse(ReturnCodeEnum.TICKET_PAID);
