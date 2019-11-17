@@ -1,5 +1,6 @@
 package com.sctt.cinema.api.business.entity.jpa;
 
+import com.sctt.cinema.api.common.enums.MovieFormatEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -64,7 +65,7 @@ public class Showtime extends BaseJPAEntity {
     @Override
     public boolean isValid() {
         return movieID > 0 &&
-                (movieFormat == 0 || movieFormat == 1) &&
+                (movieFormat == MovieFormatEnum._2D.getValue() || movieFormat == MovieFormatEnum._3D.getValue()) &&
                 timeFrom.getTime() > 0 &&
                 (status == 0 || status == 1);
     }
