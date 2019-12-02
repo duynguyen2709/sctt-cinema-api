@@ -48,7 +48,8 @@ public class RequestLoggingServlet extends DispatcherServlet {
             logEnt.request = UriComponentsBuilder.fromHttpRequest(new ServletServerHttpRequest(request)).build().toUriString();
             if (logEnt.method.equalsIgnoreCase("POST") ||
                     logEnt.method.equalsIgnoreCase("PUT")) {
-                logEnt.body = GsonUtils.fromJsonString(request.getBody(), Object.class).toString();
+                if (request.getBody() != null && !request.getBody().isEmpty())
+                    logEnt.body = GsonUtils.fromJsonString(request.getBody(), Object.class).toString();
             } else {
                 logEnt.body = null;
             }
@@ -85,16 +86,16 @@ public class RequestLoggingServlet extends DispatcherServlet {
     }
 
     private class LogMessage implements Serializable {
-        public String           method;
-        public String           path;
-        public String           request;
-        public String           body;
-        public MiniBaseResponse response;
+        public String           method = "";
+        public String           path = "";
+        public String           request = "";
+        public String           body = "";
+        public MiniBaseResponse response = new MiniBaseResponse();
     }
 
     private class MiniBaseResponse implements Serializable {
-        public int    returnCode;
-        public String returnMessage;
+        public int    returnCode = 0;
+        public String returnMessage = "";
     }
 
     public class RequestWrapper extends HttpServletRequestWrapper {
