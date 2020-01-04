@@ -38,7 +38,7 @@ public class User extends BaseJPAEntity {
 
     @Override
     public boolean isValid() {
-        return !email.isEmpty() && !password.isEmpty() &&
+        return !email.isEmpty() &&
                 !fullName.isEmpty() && !phoneNumber.isEmpty()
                 && (role == 0 || role == 1 || role == 2);
     }
