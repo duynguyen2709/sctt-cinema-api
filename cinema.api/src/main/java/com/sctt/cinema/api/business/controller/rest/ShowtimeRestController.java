@@ -11,6 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @Log4j2
@@ -27,6 +30,14 @@ public class ShowtimeRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            List<Showtime> data = service.findAll();
+            if (data != null){
+                data.sort(new Comparator<Showtime>() {
+                    @Override public int compare(Showtime o1, Showtime o2) {
+                        return Integer.compare(o1.showtimeID, o2.showtimeID);
+                    }
+                });
+            }
             res.data = service.findAll();
         } catch (Exception e){
             log.error("[findAll] ex: {}",e.getMessage());

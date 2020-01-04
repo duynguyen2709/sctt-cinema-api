@@ -9,6 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @Log4j2
@@ -22,7 +25,15 @@ public class MovieRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
-            res.data = service.findAll();
+            List<Movie> data = service.findAll();
+            if (data != null){
+                data.sort(new Comparator<Movie>() {
+                    @Override public int compare(Movie o1, Movie o2) {
+                        return Integer.compare(o1.movieID, o2.movieID);
+                    }
+                });
+            }
+            res.data = data;
         } catch (Exception e){
             log.error("[findAll] ex: {}",e.getMessage());
             res = BaseResponse.EXCEPTION_RESPONSE;

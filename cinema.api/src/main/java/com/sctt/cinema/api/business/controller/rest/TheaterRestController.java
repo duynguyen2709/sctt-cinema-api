@@ -9,6 +9,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @Log4j2
@@ -22,6 +25,14 @@ public class TheaterRestController {
         BaseResponse res = new BaseResponse(ReturnCodeEnum.SUCCESS);
 
         try{
+            List<Theater> data = service.findAll();
+            if (data != null){
+                data.sort(new Comparator<Theater>() {
+                    @Override public int compare(Theater o1, Theater o2) {
+                        return Integer.compare(o1.theaterID, o2.theaterID);
+                    }
+                });
+            }
             res.data = service.findAll();
         } catch (Exception e){
             log.error("[findAll] ex: {}",e.getMessage());

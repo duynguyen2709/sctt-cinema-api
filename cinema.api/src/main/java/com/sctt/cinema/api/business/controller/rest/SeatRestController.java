@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,12 @@ public class SeatRestController {
             List<Seat> data = seatService.findAll();
             if (roomID != null){
                 data = data.stream().filter(c -> c.roomID == roomID).collect(Collectors.toList());
+                data.sort(new Comparator<Seat>() {
+                    @Override
+                    public int compare(Seat o1, Seat o2) {
+                        return Integer.compare(o1.roomID, o2.roomID);
+                    }
+                });
             }
             res.data = data;
         } catch (Exception e) {

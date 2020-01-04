@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +33,11 @@ public class RoomRestController {
             List<Room> data = service.findAll();
             if (theaterID != null){
                 data = data.stream().filter(c -> c.theaterID == theaterID).collect(Collectors.toList());
+                data.sort(new Comparator<Room>() {
+                    @Override public int compare(Room o1, Room o2) {
+                        return Integer.compare(o1.roomID, o2.roomID);
+                    }
+                });
             }
 
             for (Room r : data){

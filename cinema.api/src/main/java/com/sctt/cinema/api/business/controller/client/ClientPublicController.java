@@ -158,7 +158,8 @@ public class ClientPublicController {
 
             List<Showtime> listShowtimeFiltered = showtimeService.findAll()
                             .stream()
-                            .filter(c -> c.status == 1 && date.equals(DateTimeUtils.parseTimestampToString(c.timeFrom.getTime(), "yyyyMMdd")))
+                            .filter(c -> c.status == 1 && date.equals(DateTimeUtils.parseTimestampToString(c.timeFrom.getTime(), "yyyyMMdd"))
+                            && c.timeTo != null && c.timeTo.getTime() > System.currentTimeMillis())
                             .collect(Collectors.toList());
 
             if (type == ShowtimeTypeEnum.MOVIE.getValue()) {
